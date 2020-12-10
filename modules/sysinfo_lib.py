@@ -52,7 +52,7 @@ def parseTable(input, headerPattern = None, endPattern = None, ignoreEmpty = Tru
             colLengths.append(len(value))
 
     if len(colNames) > 0:
-        colLengths[-1] = 1024
+        colLengths[-1] = 8192
         totalLength = sum(colLengths)
         packTemplate = ''.join([str(s) + 's' for s in colLengths])
 
