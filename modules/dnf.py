@@ -8,7 +8,6 @@ def parser_repolist(stdout, stderr):
     col2 = None
     if stdout:
         for line in stdout.splitlines():
-            print (line)
             tableHeader = re.search(r'^(repo id\s+)(repo name\s+)status', line, re.IGNORECASE)
 
             if col1 and col2:

@@ -51,9 +51,6 @@ def parseTable(input, headerPattern = None, endPattern = None, ignoreEmpty = Tru
             colNames.append(camelCase(value.strip()))
             colLengths.append(len(value))
 
-    print (colNames)
-    print (colLengths)
-
     if len(colNames) > 0:
         colLengths[-1] = 1024
         totalLength = sum(colLengths)
@@ -93,8 +90,6 @@ def parseSpaceTable(input, ignoreEmpty = True):
     if header:
         for value in header:
             colNames.append(camelCase(value.strip()))
-
-    print (colNames)
 
     if len(colNames) > 0:
         for line in lines:
