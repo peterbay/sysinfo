@@ -121,6 +121,8 @@ etc_passwd                - Attributes of each user or account on a computer
 etc_release               - OS release info
 etc_shadow                - Shadow database of the passwd file
 etc_timezone              - Timezone settings
+fbset                     - Show frame buffer device settings
+fbset_info                - Show frame buffer device information
 findmnt                   - List all mounted filesytems
 free                      - Amount of free and used memory in the system
 getconf                   - Configuration variables for the current system and their values

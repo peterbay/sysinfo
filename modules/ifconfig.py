@@ -10,14 +10,23 @@ def extractValue(data, line, key, regExp):
 
 def extractValues(data, line):
     for pair in re.split(r'\s\s+', line):
-        desc = re.search(r'^\((.*)\)$', pair.strip())
+        desc = re.search(r'^(.*)\((.*)\)$', pair.strip())
         if desc:
-            data['description'] = desc.group(1)
-            continue
+            data['description'] = desc.group(2)
+            if desc.group(1):
+                pair = desc.group(1).strip()
+            else:
+                continue
 
         kv = re.search(r'^([^\s]+)\s(\S.*)$', pair)
         if kv:
-            data[kv.group(1)] = kv.group(2)
+            value = kv.group(2)
+            valueFix = re.search(r'^(\S+)\s+(\S+)\s(\S+)$', value)
+            if valueFix:
+                data[kv.group(1)] = valueFix.group(1)
+                data[valueFix.group(2)] = valueFix.group(3)
+            else:    
+                data[kv.group(1)] = value
 
     return extractValues
 
