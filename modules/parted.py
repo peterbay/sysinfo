@@ -30,7 +30,7 @@ def parser(stdout, stderr):
                     'model': lineSplit[6],
                     'diskFlags': lineSplit[7],
                     'table': {}
-                };
+                }
 
             if path and re.search(r'^(\d+):', line):
                 output[path]['table'][lineSplit[0]] = {

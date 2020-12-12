@@ -1,5 +1,6 @@
 
 import re
+from sysinfo_lib import camelCase
 
 def parser(stdout, stderr):
     output = {'devices': {}, 'parents': {}}
@@ -9,7 +10,7 @@ def parser(stdout, stderr):
         'L': 'linkPriority',
         'E': 'entry',
         'S': 'link'
-    };
+    }
     device = None
     parent = None
     if stdout:
@@ -33,7 +34,9 @@ def parser(stdout, stderr):
                 if key == 'entry':
                     valueSearch = re.search(r'^([^=]+)=(.*)$', value)
                     if valueSearch:
-                        output['devices'][device]['entry'][valueSearch.group(1)] = valueSearch.group(2).strip()
+                        subkey = valueSearch.group(1).lower()
+                        subvalue = valueSearch.group(2).strip()
+                        output['devices'][device]['entry'][subkey] = subvalue
                 
                 elif key == 'link':
                     output['devices'][device]['link'].append(value)
@@ -58,7 +61,24 @@ def parser(stdout, stderr):
             if parent:
                 parentKeyValue = re.search(r'^\s+([^=]+)=="([^"]+)"', line)
                 if parentKeyValue:
-                    output['parents'][parent][parentKeyValue.group(1)] = parentKeyValue.group(2)
+                    key = parentKeyValue.group(1).lower()
+                    value = parentKeyValue.group(2)
+
+                    multipleValues = re.match(r'^(\s+\d+)+$', value)
+                    if multipleValues:
+                        value = re.split(r'\s+', value.strip())
+
+                    keyAttr = re.match(r'^(\S+){([^}]+)}', key, re.IGNORECASE)
+                    if keyAttr:
+                        attrType = keyAttr.group(1).lower()
+                        if not attrType in output['parents'][parent]:
+                            output['parents'][parent][attrType] = {}
+
+                        attrKey = camelCase(keyAttr.group(2))
+                        output['parents'][parent][attrType][attrKey] = value
+
+                    else:
+                        output['parents'][parent][key] = value
 
     return {'output': output}
 
