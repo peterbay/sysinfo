@@ -63,31 +63,41 @@ def execute(cmd):
 
     outs, errs = '', ''
 
-    try:
-        proc = subprocess.Popen(cmd.get('cmd', ''), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        cmdTimer = Timer(int(cmd.get('timeout', 30)), kill, [proc])
+    if 'function' in cmd:
+        module_function = cmd.get('function', None);
+        if module_function and callable(module_function):
+            outs = module_function()
 
+        cmd['stdout'] = outs
+        cmd['stderr'] = errs
+        return cmd
+
+    elif 'cmd' in cmd:
         try:
-            cmdTimer.start()
-            outs, errs = proc.communicate()
+            proc = subprocess.Popen(cmd.get('cmd', ''), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            cmdTimer = Timer(int(cmd.get('timeout', 30)), kill, [proc])
+
+            try:
+                cmdTimer.start()
+                outs, errs = proc.communicate()
+
+            except Exception as err:
+                proc.kill()
+                outs, errs = proc.communicate()
+                cmd['error'] = err
+
+            finally:
+                cmdTimer.cancel()
 
         except Exception as err:
-            proc.kill()
-            outs, errs = proc.communicate()
             cmd['error'] = err
 
-        finally:
-            cmdTimer.cancel()
-
-    except Exception as err:
-        cmd['error'] = err
-
-    if proc:
-        procPoll = proc.poll()
-        if procPoll != 0:
-            cmd['rc'] = procPoll
-            if not cmd.get('error', None):
-                cmd['error'] = 'error'
+        if proc:
+            procPoll = proc.poll()
+            if procPoll != 0:
+                cmd['rc'] = procPoll
+                if not cmd.get('error', None):
+                    cmd['error'] = 'error'
 
     if PY2:
         cmd['stdout'] = outs
@@ -119,7 +129,12 @@ def run(args):
             sys.stdout.write('%-25s - %s\n' % (name, settings.get('description', ''), ))
         
         elif args.info:
-            sys.stdout.write('%-25s - %s\n' % (name, settings.get('cmd', ''), ))
+            if 'function' in settings:
+                info = 'built-in function'
+            else:
+                info = settings.get('cmd', '')
+
+            sys.stdout.write('%-25s - %s\n' % (name, info, ))
 
         elif args.all or name in args.commands:
             settings['name'] = name
@@ -137,16 +152,20 @@ def run(args):
 
             parser = result.get('parser', None)
             if parser and callable(parser):
-                parsed = parser(result.get('stdout', None), result.get('stderr', None))
+                try:
+                    parsed = parser(result.get('stdout', None), result.get('stderr', None))
 
-                if isinstance(parsed, dict):
-                    result['output'] = parsed.get('output', None)
-                    result['ignored'] = parsed.get('ignored', None)
+                    if isinstance(parsed, dict):
+                        result['output'] = parsed.get('output', None)
+                        result['ignored'] = parsed.get('ignored', None)
+                except Exception as err:
+                    result['parser_error'] = str(err)
 
             else:
                 result['output'] = result.get('stdout', None)
 
             result.pop('parser', None)
+            result.pop('function', None)
 
             if not args.verbose and not args.error:
                 result.pop('stdout', None)
@@ -164,7 +183,7 @@ def run(args):
         else:
             sys.stdout.write(json.dumps(results, indent=4, sort_keys=True) + '\n')
 
-    else:
+    elif not args.list and not args.info:
         sys.stdout.write('No commands to execute\n')
 
 def argsError(error):

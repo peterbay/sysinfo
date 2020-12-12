@@ -23,7 +23,7 @@ def parser(stdout, stderr):
     return {
         'output': output,
         'ignored': ignoredLines
-        }
+    }
 
 def register(main):
     main['blkid'] = {

@@ -4,6 +4,9 @@ import sys
 from struct import pack, unpack
 from sysinfo_lib import camelCase
 
+PY2 = sys.version_info[0] == 2
+PY3 = sys.version_info[0] == 3 
+
 def parser_stats(stdout, stderr):
     output = {}
     if stdout:
@@ -17,45 +20,54 @@ def parser_stats(stdout, stderr):
 def parser_disk(stdout, stderr):
     output = {}
     sectionsNames = []
-    sectionsColumns = [None, None, None, None, None, None, None]
     sectionsMask = ''
     totalLength = 0
+    columnPaths = []
     if stdout:
         for line in stdout.splitlines():
             if re.match(r'disk.*reads', line, re.IGNORECASE):
                 topHeader = re.split(r'\s+', line)
                 if topHeader:
                     for value in topHeader:
-                        sectionsNames.append(value.strip().strip('-'))
+                        sectionsNames.append(value.strip().strip('-').lower())
                         totalLength += len(value) + 1
                         sectionsMask += str(len(value) + 1) + 's'
-            else:
+
+            elif not sectionsMask:
+                continue
+
+            if re.match(r'.*total.*merged.*sectors.*', line):
                 lineFix = line + (' ' * (totalLength - len(line)))
                 if sys.version_info[0] != 2:
                     lineFix = bytes(lineFix, 'utf-8')
-
+                
                 sectionData = unpack(sectionsMask, lineFix)
+                if sectionData:
+                    index = 0
 
-                disk = None
-                for num, val in enumerate(sectionData, start=0):
-                    section = val.strip()
-                    sectionName = sectionsNames[num]
-                    if num == 0 and len(section) > 0:
-                        disk = section
-                        output[disk] = {}
-                    elif disk:
-                        output[disk][sectionName] = {}
+                    for sec in sectionData:
+                        if PY2:
+                            secStrip = sec.strip()
+                        else:
+                            secStrip = str(sec.strip(), 'utf-8')
 
-                    sectionSplit = re.split(r'\s+', section)
+                        topColumns = re.split(r'\s+', secStrip)
+                        if topColumns:
 
-                    if re.match(r'\D', section, re.IGNORECASE):
-                        sectionsColumns[num] = sectionSplit
-
-                    elif sectionsColumns[num]:
-                        for numSec, valSec in enumerate(sectionSplit, start=0):
-                            if numSec < len(sectionsColumns[num]):
-                                colName = sectionsColumns[num][numSec]
-                                output[disk][sectionName][colName.lower()] = valSec.strip()
+                            for column in topColumns:
+                                if column:
+                                    columnPaths.append(camelCase('%s %s' %(sectionsNames[index], column, )))
+                                else:
+                                    columnPaths.append('%s' %(sectionsNames[index], ))
+                        index += 1
+            else:
+                entry = {}
+                columns = re.split(r'\s+', line)
+                for ci, cv in enumerate(columns):
+                    if ci < len(columnPaths):
+                        entry[columnPaths[ci]] = cv
+                if 'disk' in entry:
+                    output[entry['disk']] = entry
 
     return {'output': output}
 

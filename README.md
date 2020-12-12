@@ -172,6 +172,8 @@ proc_vmstat               - Detailed virtual memory statistics from the kernel
 processor                 - Processor type
 prtstat                   - Print statistics of a processes
 ps                        - Report a snapshot of the current processes
+python_pip_packages       - List available python modules
+python_platform           - Probe the underlying platform's hardware, operating system, and Python interpreter version information
 rpm                       - Querying all RPM packages
 services                  - Service names
 services_list             - Displays services with status
