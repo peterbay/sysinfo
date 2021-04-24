@@ -10,30 +10,30 @@
 * Parallel commands execution
 * Output to stdout or file
 * Output can be processed by jq
+* Storing output from commands in the selected directory
+* Reading the stored outputs of commands from the selected directory
 
 ## Command-line arguments
 ```
-usage: sysinfo.py [-h] [--all] [--error] [--info] [--list] [--output OUTPUT]
-                  [--pool POOL] [--verbose]
-                  [commands [commands ...]]
+usage: sysinfo.py [-h] [--all] [--error] [--export-only] [--export-dir PATH] [--import-dir PATH]
+                  [--info] [--list] [--output OUTPUT] [--pool POOL] [--verbose] [commands [commands ...]]
 
 positional arguments:
-  commands              Commands
+  commands                    Commands
 
 optional arguments:
-  -h, --help            show this help message and exit
-  --all, -a             Execute all commands.
-  --error, -e           Show only error outputs from commands.
-  --info, -i            List all commands with command line arguments.
-  --list, -l            List all commands.
-  --output OUTPUT, -o OUTPUT
-                        Path to the output file.
-  --pool POOL, -p POOL  Pool size for parallel execution of commands. (default
-                        value is 5)
-  --verbose, -v         Add more info to output - options, commands, raw
-                        command result.
+  -h, --help                  Show this help message and exit
+  --all, -a                   Execute all commands.
+  --error, -e                 Show only error outputs from commands.
+  --export-only               Export output from commands without processing.
+  --export-dir PATH           Path to the directory for saving output from commands.
+  --import-dir PATH           Path to the directory for reading the stored outputs of commands.
+  --info, -i                  List all commands with command line arguments.
+  --list, -l                  List all commands.
+  --output OUTPUT, -o OUTPUT  Path to the output file.
+  --pool POOL, -p POOL        Pool size for parallel execution of commands. (default value is 5)
+  --verbose, -v               Add more info to output - options, commands, raw command result.
 ```
-
 ## Examples
 
 ### Standart JSON output
@@ -84,6 +84,16 @@ python2 sysinfo.py lsblk | jq -r ".lsblk.output[] | [.name, .label, .size,
 "mmcblk0boot1","","4M",""
 "mmcblk0p1","boot","256M","/boot"
 "mmcblk0p2","rootfs","14.3G","/"
+```
+
+### Storing output from commands in the selected directory
+```
+sudo python sysinfo.py --export-dir ./out blkid
+```
+
+### Reading the stored outputs of commands from the selected directory.
+```
+sudo python sysinfo.py --import-dir ./out blkid
 ```
 
 ## Resources

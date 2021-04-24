@@ -54,50 +54,65 @@ def loadModules():
                 if hasattr(lib, 'register'):
                     lib.register(siModules)
 
+def readFile(pathToFile):
+    try:
+        f = open(pathToFile, 'r')
+        content = f.read()
+        f.close()
+        return content, None
+
+    except Exception as err:
+        return None, err
+
+def writeToFile(pathToFile, content):
+    try:
+        f = open(pathToFile, 'w')
+        f.write(content)
+        f.close()
+
+    except Exception as err:
+        sys.stdout.write('ERROR: Can\'t write to file \'%s\': %s\n' % (pathToFile, err))
+
+def pathCheck(args):
+    if args.export_dir:
+        if not os.access(args.export_dir, os.W_OK):
+            sys.stdout.write('ERROR: Export directory \'%s\' not exist or is not writable\n' % (args.export_dir, ))
+            exit(1)
+
+    if args.import_dir:
+        if not os.access(args.import_dir, os.R_OK):
+            sys.stdout.write('ERROR: Import directory \'%s\' not exist or is not readable\n' % (args.import_dir, ))
+            exit(1)
+
 def kill(process):
     return process.kill()
 
-def execute(cmd):
-    if not isinstance(cmd, dict):
-        return {}
+def executeCmd(cmd):
+    try:
+        proc = subprocess.Popen(cmd.get('cmd', ''), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        cmdTimer = Timer(int(cmd.get('timeout', 30)), kill, [proc])
 
-    outs, errs = '', ''
-
-    if 'function' in cmd:
-        module_function = cmd.get('function', None);
-        if module_function and callable(module_function):
-            outs = module_function()
-
-        cmd['stdout'] = outs
-        cmd['stderr'] = errs
-        return cmd
-
-    elif 'cmd' in cmd:
         try:
-            proc = subprocess.Popen(cmd.get('cmd', ''), shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            cmdTimer = Timer(int(cmd.get('timeout', 30)), kill, [proc])
-
-            try:
-                cmdTimer.start()
-                outs, errs = proc.communicate()
-
-            except Exception as err:
-                proc.kill()
-                outs, errs = proc.communicate()
-                cmd['error'] = err
-
-            finally:
-                cmdTimer.cancel()
+            cmdTimer.start()
+            outs, errs = proc.communicate()
 
         except Exception as err:
+            proc.kill()
+            outs, errs = proc.communicate()
             cmd['error'] = err
 
-        if proc:
-            procPoll = proc.poll()
-            if procPoll != 0:
-                cmd['rc'] = procPoll
-                if not cmd.get('error', None):
-                    cmd['error'] = 'error'
+        finally:
+            cmdTimer.cancel()
+
+    except Exception as err:
+        cmd['error'] = err
+
+    if proc:
+        procPoll = proc.poll()
+        if procPoll != 0:
+            cmd['rc'] = procPoll
+            if not cmd.get('error', None):
+                cmd['error'] = 'error'
 
     if PY2:
         cmd['stdout'] = outs
@@ -106,15 +121,30 @@ def execute(cmd):
         cmd['stdout'] = str(outs, 'utf-8')
         cmd['stderr'] = str(errs, 'utf-8')
 
-    return cmd
+def execute(cmd):
+    if not isinstance(cmd, dict):
+        return {}
 
-def writeToOutput(pathToFile, content):
-    try:
-        f = open(pathToFile, 'w')
-        f.write(content)
-        f.close()
-    except Exception as err:
-        sys.stdout.write('ERROR: Can\'t write to file \'%s\': %s\n' % (pathToFile, err))
+    if 'import_dir' in cmd:
+        commandImportPath = join(cmd.get('import_dir', ''), cmd.get('name', ''))
+        cmd['stdout'], cmd['stderr'] = readFile(commandImportPath)
+
+    else:
+        outs, errs = '', ''
+
+        if 'function' in cmd:
+            moduleFunction = cmd.get('function', None)
+            if moduleFunction and callable(moduleFunction):
+                outs = moduleFunction()
+
+            cmd['stdout'] = outs
+            cmd['stderr'] = errs
+            return cmd
+
+        elif 'cmd' in cmd:
+            executeCmd(cmd)
+
+    return cmd
 
 def run(args):
     poolSize = int(args.pool)
@@ -138,6 +168,8 @@ def run(args):
 
         elif args.all or name in args.commands:
             settings['name'] = name
+            if args.import_dir:
+                settings['import_dir'] = args.import_dir
             selectedModules.append(settings)
             executeModules = True
 
@@ -148,6 +180,13 @@ def run(args):
                 continue
 
             if args.error and not result.get('error', None):
+                continue
+
+            if args.export_dir:
+                commandExportPath = join(args.export_dir, name)
+                writeToFile(commandExportPath, result.get('stdout', None))
+
+            if args.export_only:
                 continue
 
             parser = result.get('parser', None)
@@ -175,13 +214,16 @@ def run(args):
                 result.pop('description', None)
                 result.pop('name', None)
                 result.pop('ignored', None)
+                result.pop('import_dir', None)
 
             results[name] = result
 
-        if args.output:
-            writeToOutput(args.output, json.dumps(results, indent=4, sort_keys=True))
-        else:
-            sys.stdout.write(json.dumps(results, indent=4, sort_keys=True) + '\n')
+        if not args.export_only:
+            if args.output:
+                writeToFile(args.output, json.dumps(results, indent=4, sort_keys=True))
+
+            else:
+                sys.stdout.write(json.dumps(results, indent=4, sort_keys=True) + '\n')
 
     elif not args.list and not args.info:
         sys.stdout.write('No commands to execute\n')
@@ -195,6 +237,9 @@ def main(argv):
 
     parser.add_argument('--all', '-a', action='store_true', default=False, help='Execute all commands.')
     parser.add_argument('--error', '-e', action='store_true', default=False, help='Show only error outputs from commands.')
+    parser.add_argument('--export-only', action='store_true', default=False, help='Export output from commands without processing.')
+    parser.add_argument('--export-dir', help='Path to the directory for saving output from commands.')
+    parser.add_argument('--import-dir', help='Path to the directory for reading the stored outputs of commands.')
     parser.add_argument('--info', '-i', action='store_true', default=False, help='List all commands with command line arguments.')
     parser.add_argument('--list', '-l', action='store_true', default=False, help='List all commands.')
     parser.add_argument('--output', '-o', help='Path to the output file.')
@@ -203,6 +248,7 @@ def main(argv):
     parser.add_argument('commands', nargs='*', help='Commands')
 
     args = parser.parse_args()
+    pathCheck(args)
     run (args)
 
 if __name__ == '__main__':
