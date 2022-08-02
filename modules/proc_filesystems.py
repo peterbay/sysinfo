@@ -1,23 +1,33 @@
-
 import re
 
-def parser(stdout, stderr):
+
+def parser(stdout, stderr, to_camelcase):
     output = {}
+    unprocessed = []
+
     if stdout:
         for line in stdout.splitlines():
-            lineMatch = re.search(r'^(\S+)\s+(\S+)', line)
-            if lineMatch:
-                output[lineMatch.group(2).strip()] = lineMatch.group(1).strip()
+            kv = re.search(r"^(\S+)\s+(\S+)", line)
+            if kv:
+                key = kv.group(2).strip()
+                value = kv.group(1).strip()
 
-            lineMatch = re.search(r'^\s+(\S+)$', line)
-            if lineMatch:
-                output[lineMatch.group(1).strip()] = ''
-    
-    return {'output': output}
+                output[key] = value
+                continue
+
+            k = re.search(r"^\s+(\S+)$", line)
+            if k:
+                output[k.group(1).strip()] = ""
+                continue
+
+            unprocessed.append(line)
+
+    return {"output": output, "unprocessed": unprocessed}
+
 
 def register(main):
-    main['proc_filesystems'] = {
-        'cmd': 'cat /proc/filesystems',
-        'description': 'List of the file system types currently supported by the kernel',
-        'parser': parser
+    main["proc_filesystems"] = {
+        "cmd": "cat /proc/filesystems",
+        "description": "List of the file system types currently supported by the kernel",
+        "parser": parser,
     }

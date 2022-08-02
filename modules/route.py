@@ -7,7 +7,7 @@ def parser(stdout, stderr, to_camelcase):
     if stdout:
         output = parseTable(
             stdout,
-            header_pattern=r"^(\s*NS)(\sTYPE\s+)(\sPATH\s*)(\s\s*NPROCS)(\s*\sPID)(\s*\sPPID)(\s*\sUID)(\sUSER\s*)(\sCOMMAND\s*)",
+            header_pattern=r"^(Destination\s*)(\sGateway\s*)(\sGenmask\s*)(\sFlags\s*)(\sMetric\s*)(\sRef\s)(\s*Use)(\sIface\s*)(\sMSS\s*)(\sWindow\s*)(\sirtt\s*)",
             to_camelcase=to_camelcase,
         )
 
@@ -15,8 +15,8 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["lsns"] = {
-        "cmd": "lsns -o NS,TYPE,PATH,NPROCS,PID,PPID,UID,USER,COMMAND",
-        "description": "Block device ioctls",
+    main["route"] = {
+        "cmd": "route -ee",
+        "description": "IP routing table",
         "parser": parser,
     }

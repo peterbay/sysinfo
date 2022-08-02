@@ -1,29 +1,39 @@
-
 import re
 from sysinfo_lib import camelCase
 
-def parser(stdout, stderr):
+
+def parser(stdout, stderr, to_camelcase):
     output = {}
     columns = None
+    unprocessed = []
+
     if stdout:
-        typeName = ''
         for line in stdout.splitlines():
-            if re.search(r'total\s+used', line, re.IGNORECASE):
-                columns = re.split(r'\s+', line.strip())
+            if re.search(r"total\s+used", line, re.IGNORECASE):
+                columns = re.split(r"\s+", line.strip())
+                continue
 
-            entrySearch = re.search(r'^([^:]+):\s+(.*)$', line)
+            entrySearch = re.search(r"^([^:]+):\s+(.*)$", line)
             if columns and entrySearch:
-                type = camelCase(entrySearch.group(1))
+                type = camelCase(entrySearch.group(1), to_camelcase)
                 output[type] = {}
-                for idx, value in enumerate(re.split(r'\s+', entrySearch.group(2).strip())):
+                for idx, value in enumerate(
+                    re.split(r"\s+", entrySearch.group(2).strip())
+                ):
                     if idx < len(columns):
-                        output[type][columns[idx]] = value
+                        key = camelCase(columns[idx], to_camelcase)
+                        output[type][key] = value
 
-    return {'output': output}
+                continue
+
+            unprocessed.append(line)
+
+    return {"output": output, "unprocessed": unprocessed}
+
 
 def register(main):
-    main['free'] = {
-        'cmd': 'free -b -l -w',
-        'description': 'Amount of free and used memory in the system',
-        'parser': parser
+    main["free"] = {
+        "cmd": "free -b -l -w",
+        "description": "Amount of free and used memory in the system",
+        "parser": parser,
     }

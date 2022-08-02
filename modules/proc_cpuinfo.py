@@ -1,36 +1,40 @@
-
 import re
 from sysinfo_lib import camelCase
 
-def parser(stdout, stderr):
-    output = {
-        'processor': {},
-        'hardware': {},
-        'oth': {}
-        }
+
+def parser(stdout, stderr, to_camelcase):
+    output = {"processor": {}, "hardware": {}, "oth": {}}
+    unprocessed = []
 
     if stdout:
-        for block in re.split(r'\r\r|\n\n|\r\n\r\n', stdout):
+        for block in re.split(r"\r\r|\n\n|\r\n\r\n", stdout):
             sub = {}
             for line in block.splitlines():
-                values = re.search(r'([^\t]+)\s*:\s*(.*)$', line)
-                if values:
-                    sub[camelCase(values.group(1).strip())] = values.group(2).strip()
+                kv = re.search(r"([^\t]+)\s*:\s*(.*)$", line)
+                if kv:
+                    key = camelCase(kv.group(1).strip(), to_camelcase)
+                    value = kv.group(2).strip()
 
-            if 'processor' in sub:
-                output['processor'][sub['processor']] = sub
+                    sub[key] = value
+                    continue
 
-            elif 'hardware' in sub:
-                output['hardware'] = sub
+                unprocessed.append(line)
+
+            if "processor" in sub:
+                output["processor"][sub["processor"]] = sub
+
+            elif "hardware" in sub:
+                output["hardware"] = sub
 
             else:
-                output['oth'] = sub
+                output["oth"] = sub
 
-    return {'output': output}
+    return {"output": output, "unprocessed": unprocessed}
+
 
 def register(main):
-    main['proc_cpuinfo'] = {
-        'cmd': 'cat /proc/cpuinfo',
-        'description': 'Type of processor used by your system',
-        'parser': parser
+    main["proc_cpuinfo"] = {
+        "cmd": "cat /proc/cpuinfo",
+        "description": "Type of processor used by your system",
+        "parser": parser,
     }

@@ -1,13 +1,15 @@
+def parser(stdout, stderr, to_camelcase):
+    output = ""
 
-def parser(stdout, stderr):
-    output = ''
     if stdout:
         output = stdout.strip()
-    return {'output': output}
+
+    return {"output": output, "unprocessed": []}
+
 
 def register(main):
-    main['etc_timezone'] = {
-        'cmd': 'cat /etc/timezone',
-        'description': 'Timezone settings',
-        'parser': parser
+    main["etc_timezone"] = {
+        "cmd": "cat /etc/timezone",
+        "description": "Timezone settings",
+        "parser": parser,
     }

@@ -8,7 +8,7 @@ def parser(stdout, stderr, to_camelcase):
     if stdout:
         typeName = ""
         for line in stdout.splitlines():
-            matchType = re.search(r"^\/dev\/disk\/by-(.*):\s*$", line)
+            matchType = re.search(r"^\/dev\/input\/by-(.*):\s*$", line)
             if matchType:
                 typeName = matchType.group(1)
                 output[typeName] = {}
@@ -35,8 +35,8 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["dev_disk"] = {
-        "cmd": "ls -l /dev/disk/by-*",
-        "description": "Disk devices mapping",
+    main["dev_input"] = {
+        "cmd": "ls -l /dev/input/by-*",
+        "description": "Input devices mapping",
         "parser": parser,
     }

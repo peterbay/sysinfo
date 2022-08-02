@@ -1,19 +1,28 @@
-
 import re
 
-def parser(stdout, stderr):
+
+def parser(stdout, stderr, to_camelcase):
     output = {}
+    unprocessed = []
+
     if stdout:
         for line in stdout.splitlines():
-            keyValueSearch = re.search(r'^\s*([^:]+):\s*(.*)$', line)
-            if keyValueSearch:
-                output[keyValueSearch.group(1)] = keyValueSearch.group(2).strip()
+            kv = re.search(r"^\s*([^:]+):\s*(.*)$", line)
+            if kv:
+                key = kv.group(1).strip()
+                value = kv.group(2).strip()
 
-    return {'output': output}
+                output[key] = value
+                continue
+
+            unprocessed.append(line)
+
+    return {"output": output, "unprocessed": unprocessed}
+
 
 def register(main):
-    main['proc_dma'] = {
-        'cmd': 'cat /proc/dma',
-        'description': 'List of the registered ISA DMA channels in use',
-        'parser': parser
+    main["proc_dma"] = {
+        "cmd": "cat /proc/dma",
+        "description": "List of the registered ISA DMA channels in use",
+        "parser": parser,
     }

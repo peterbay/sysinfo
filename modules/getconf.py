@@ -1,21 +1,29 @@
-
 import re
+from sysinfo_lib import camelCase
 
-def parser(stdout, stderr):
+
+def parser(stdout, stderr, to_camelcase):
     output = {}
+    unprocessed = []
+
     if stdout:
         for line in stdout.splitlines():
-            kv = re.search(r'^(\S+)\s*(.*)$', line)
+            kv = re.search(r"^(\S+)\s*(.*)$", line)
             if kv:
-                output[kv.group(1)] = kv.group(2).strip()
+                key = camelCase(kv.group(1), to_camelcase)
+                value = kv.group(2).strip()
 
-    return {
-        'output': output,
-        }
+                output[key] = value
+                continue
+
+            unprocessed.append(line)
+
+    return {"output": output, "unprocessed": unprocessed}
+
 
 def register(main):
-    main['getconf'] = {
-        'cmd': 'getconf -a',
-        'description': 'Configuration variables for the current system and their values',
-        'parser': parser
+    main["getconf"] = {
+        "cmd": "getconf -a",
+        "description": "Configuration variables for the current system and their values",
+        "parser": parser,
     }
