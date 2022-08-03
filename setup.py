@@ -70,13 +70,15 @@ setup(
     classifiers=[
         'License :: GNU GPLv3',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 2.7',
     ],
     package_dir={"": "."},
     packages=find_packages(),
     install_requires=INSTALL_REQUIRES,
     include_package_data=True,
     extras_require=EXTRAS_REQUIRE,
-    python_requires=">=3.9",
+    python_requires=">=2.7",
     py_modules=['sysinfo'],
 )
