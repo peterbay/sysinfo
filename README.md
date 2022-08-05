@@ -24,6 +24,7 @@ positional arguments:
 optional arguments:
   -h, --help                  Show this help message and exit
   --all, -a                   Execute all commands.
+  --camel-case, -c            Convert keys to CamelCase.
   --error, -e                 Show only error outputs from commands.
   --export-only               Export output from commands without processing.
   --export-dir PATH           Path to the directory for saving output from commands.
