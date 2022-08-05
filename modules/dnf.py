@@ -1,24 +1,29 @@
-
 import re
 
-def parser_repolist(stdout, stderr):
-    output = {'repos': [], 'errors': []}
+
+def parser_repolist(stdout, stderr, to_camelcase):
+    output = {"repos": [], "errors": []}
+
     insideTable = False
     col1 = None
     col2 = None
     if stdout:
         for line in stdout.splitlines():
-            tableHeader = re.search(r'^(repo id\s+)(repo name\s+)status', line, re.IGNORECASE)
+            tableHeader = re.search(
+                r"^(repo id\s+)(repo name\s+)status", line, re.IGNORECASE
+            )
 
             if col1 and col2:
-                tableRow = re.search(r'^(.{%s})(.{%s})(.*)$' % (col1, col2), line)
+                tableRow = re.search(r"^(.{%s})(.{%s})(.*)$" % (col1, col2), line)
 
                 if insideTable and tableRow:
-                    output['repos'].append({
-                        'repo': tableRow.group(1).strip(),
-                        'repo_name': tableRow.group(2).strip(),
-                        'status': tableRow.group(3).strip()
-                    })
+                    output["repos"].append(
+                        {
+                            "repo": tableRow.group(1).strip(),
+                            "repo_name": tableRow.group(2).strip(),
+                            "status": tableRow.group(3).strip(),
+                        }
+                    )
                     continue
 
             if tableHeader:
@@ -31,42 +36,46 @@ def parser_repolist(stdout, stderr):
 
     if stderr:
         for line in stderr.splitlines():
-            if re.search(r'http.*error .*', line, re.IGNORECASE):
-                if not line in output['errors']:
-                    output['errors'].append(line)
+            if re.search(r"http.*error .*", line, re.IGNORECASE):
+                if not line in output["errors"]:
+                    output["errors"].append(line)
 
-    return {'output': output}
+    return {"output": output}
 
-def parser_installed(stdout, stderr):
-    output = {'packages': [], 'errors': []}
+
+def parser_installed(stdout, stderr, to_camelcase):
+    output = {"packages": [], "errors": []}
     if stdout:
         for line in stdout.splitlines():
-            package = re.search(r'^([\S\.]+)\.(\S+)\s+(\S+\.\S+)\s+(\S+.*)$', line)
+            package = re.search(r"^([\S\.]+)\.(\S+)\s+(\S+\.\S+)\s+(\S+.*)$", line)
             if package:
-                output['packages'].append({
-                    'name': package.group(1).strip(),
-                    'arch': package.group(2).strip(),
-                    'version': package.group(3).strip(),
-                    'status': package.group(4).strip()
-                })
+                output["packages"].append(
+                    {
+                        "name": package.group(1).strip(),
+                        "arch": package.group(2).strip(),
+                        "version": package.group(3).strip(),
+                        "status": package.group(4).strip(),
+                    }
+                )
 
     if stderr:
         for line in stderr.splitlines():
-            if re.search(r'http.*error .*', line, re.IGNORECASE):
-                if not line in output['errors']:
-                    output['errors'].append(line)
+            if re.search(r"http.*error .*", line, re.IGNORECASE):
+                if not line in output["errors"]:
+                    output["errors"].append(line)
 
-    return {'output': output}
+    return {"output": output}
+
 
 def register(main):
-    main['dnf_repolist'] = {
-        'cmd': 'dnf repolist --all',
-        'description': 'DNF - defined repositories',
-        'parser': parser_repolist
+    main["dnf_repolist"] = {
+        "cmd": "dnf repolist --all",
+        "description": "DNF - defined repositories",
+        "parser": parser_repolist,
     }
 
-    main['dnf_installed'] = {
-        'cmd': 'dnf list installed',
-        'description': 'DNF - list installed packages',
-        'parser': parser_installed
+    main["dnf_installed"] = {
+        "cmd": "dnf list installed",
+        "description": "DNF - list installed packages",
+        "parser": parser_installed,
     }

@@ -1,33 +1,37 @@
-
 import re
 from sysinfo_lib import camelCase
 
-def parser(stdout, stderr):
+
+def parser(stdout, stderr, to_camelcase):
     output = {}
+    unprocessed = []
+
     if stdout:
         for line in stdout.splitlines():
-            keyValueSearch = re.search(r'^([^:]+):\s*(.*)$', line, re.IGNORECASE)
-            if keyValueSearch:
-                key = keyValueSearch.group(1).strip(':')
-                value = keyValueSearch.group(2).strip()
+            kv = re.search(r"^([^:]+):\s*(.*)$", line, re.IGNORECASE)
+            if kv:
+                key = camelCase(kv.group(1).strip(":"), to_camelcase)
+                value = kv.group(2).strip()
 
-                valueSearch = re.search(r'(.*)\s+(.*)$', value)
+                valueSearch = re.search(r"(.*)\s+(.*)$", value)
                 if valueSearch:
-                    output[camelCase(key)] = {
-                        'value': valueSearch.group(1),
-                        'type': valueSearch.group(2)
+                    output[key] = {
+                        "value": valueSearch.group(1),
+                        "type": valueSearch.group(2),
                     }
                 else:
-                    output[camelCase(key)] = {
-                        'value': value,
-                        'type': ''
-                    }
+                    output[key] = {"value": value, "type": ""}
 
-    return {'output': output}
+                continue
+
+            unprocessed.append(line)
+
+    return {"output": output, "unprocessed": []}
+
 
 def register(main):
-    main['proc_meminfo'] = {
-        'cmd': 'cat /proc/meminfo',
-        'description': 'Reports a large amount of valuable information about the systems RAM usage',
-        'parser': parser
+    main["proc_meminfo"] = {
+        "cmd": "cat /proc/meminfo",
+        "description": "Reports a large amount of valuable information about the systems RAM usage",
+        "parser": parser,
     }
