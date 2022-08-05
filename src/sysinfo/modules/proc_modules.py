@@ -25,8 +25,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_modules"] = {
-        "cmd": "cat /proc/modules",
-        "description": "List of all modules loaded into the kernel",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_modules",
+            "system": ["linux"],
+            "cmd": "cat /proc/modules",
+            "description": "List of all modules loaded into the kernel",
+            "parser": parser,
+        }
+    )

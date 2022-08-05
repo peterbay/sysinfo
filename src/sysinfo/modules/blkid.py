@@ -28,8 +28,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["blkid"] = {
-        "cmd": """blkid -o device | xargs -n 1 -I {} sh -c "echo '>>> Device: {}'; blkid -o export -p {}; blkid -o export -i {}" """,
-        "description": "Block device attributes",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "blkid",
+            "system": ["linux"],
+            "cmd": """blkid -o device | xargs -n 1 -I {} sh -c "echo '>>> Device: {}'; blkid -o export -p {}; blkid -o export -i {}" """,
+            "description": "Block device attributes",
+            "parser": parser,
+        }
+    )

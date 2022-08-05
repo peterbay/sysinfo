@@ -45,8 +45,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["chrt"] = {
-        "cmd": """ps -eo pid | grep -vi pid | xargs -I {} sh -c "echo '>>> PID: {}'; chrt -a --pid {}; echo '----'; chrt -m --pid {};" """,
-        "description": "Scheduling attributes of all the tasks (threads)",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "chrt",
+            "system": ["linux"],
+            "cmd": """ps -eo pid | grep -vi pid | xargs -I {} sh -c "echo '>>> PID: {}'; chrt -a --pid {}; echo '----'; chrt -m --pid {};" """,
+            "description": "Scheduling attributes of all the tasks (threads)",
+            "parser": parser,
+        }
+    )

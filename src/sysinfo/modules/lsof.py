@@ -98,8 +98,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["lsof"] = {
-        "cmd": "lsof -F0",
-        "description": "Information about files opened by processes",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "lsof",
+            "system": ["linux"],
+            "cmd": "lsof -F0",
+            "description": "Information about files opened by processes",
+            "parser": parser,
+        }
+    )

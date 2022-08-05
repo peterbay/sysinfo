@@ -19,8 +19,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["etc_locale_gen"] = {
-        "cmd": "cat /etc/locale.gen",
-        "description": "Configuration file for locale-gen",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "etc_locale_gen",
+            "system": ["linux"],
+            "cmd": "cat /etc/locale.gen",
+            "description": "Configuration file for locale-gen",
+            "parser": parser,
+        }
+    )

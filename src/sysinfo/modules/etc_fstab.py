@@ -28,8 +28,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["etc_fstab"] = {
-        "cmd": "cat /etc/fstab",
-        "description": "Filesystems mounted on boot",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "etc_fstab",
+            "system": ["linux"],
+            "cmd": "cat /etc/fstab",
+            "description": "Filesystems mounted on boot",
+            "parser": parser,
+        }
+    )

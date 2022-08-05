@@ -69,14 +69,22 @@ def parser_installed(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["yum_repolist"] = {
-        "cmd": "yum repolist all",
-        "description": "YUM - defined repositories",
-        "parser": parser_repolist,
-    }
+    main.register(
+        {
+            "name": "yum_repolist",
+            "system": ["linux"],
+            "cmd": "yum repolist all",
+            "description": "YUM - defined repositories",
+            "parser": parser_repolist,
+        }
+    )
 
-    main["yum_installed"] = {
-        "cmd": "yum list installed",
-        "description": "YUM - list installed packages",
-        "parser": parser_installed,
-    }
+    main.register(
+        {
+            "name": "yum_installed",
+            "system": ["linux"],
+            "cmd": "yum list installed",
+            "description": "YUM - list installed packages",
+            "parser": parser_installed,
+        }
+    )

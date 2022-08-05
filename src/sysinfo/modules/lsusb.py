@@ -129,8 +129,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["lsusb"] = {
-        "cmd": "lsusb -v",
-        "description": "List USB devices",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "lsusb",
+            "system": ["linux"],
+            "cmd": "lsusb -v",
+            "description": "List USB devices",
+            "parser": parser,
+        }
+    )

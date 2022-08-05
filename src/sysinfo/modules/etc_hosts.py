@@ -63,8 +63,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["etc_hosts"] = {
-        "cmd": """grep "" /etc/hosts*""",
-        "description": "Maps hostnames to IP addresses",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "etc_hosts",
+            "system": ["linux"],
+            "cmd": """grep "" /etc/hosts*""",
+            "description": "Maps hostnames to IP addresses",
+            "parser": parser,
+        }
+    )

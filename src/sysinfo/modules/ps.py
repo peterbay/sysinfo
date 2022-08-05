@@ -51,8 +51,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["ps"] = {
-        "cmd": "ps --cols 12288 -eo user:256,ruser:256,group:256,rgroup:256,pid,ppid,pgid,pcpu,vsz,nice,etime,time,stime,tty,args 2>/dev/null",
-        "description": "Report a snapshot of the current processes",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "ps",
+            "system": ["linux"],
+            "cmd": "ps --cols 12288 -eo user:256,ruser:256,group:256,rgroup:256,pid,ppid,pgid,pcpu,vsz,nice,etime,time,stime,tty,args 2>/dev/null",
+            "description": "Report a snapshot of the current processes",
+            "parser": parser,
+        }
+    )

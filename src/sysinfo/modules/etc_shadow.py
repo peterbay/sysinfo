@@ -19,8 +19,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["etc_shadow"] = {
-        "cmd": "cat /etc/shadow",
-        "description": "Shadow database of the passwd file",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "etc_shadow",
+            "system": ["linux"],
+            "cmd": "cat /etc/shadow",
+            "description": "Shadow database of the passwd file",
+            "parser": parser,
+        }
+    )

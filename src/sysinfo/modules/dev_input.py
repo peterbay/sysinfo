@@ -35,8 +35,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["dev_input"] = {
-        "cmd": "ls -l /dev/input/by-*",
-        "description": "Input devices mapping",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "dev_input",
+            "system": ["linux"],
+            "cmd": "ls -l /dev/input/by-*",
+            "description": "Input devices mapping",
+            "parser": parser,
+        }
+    )

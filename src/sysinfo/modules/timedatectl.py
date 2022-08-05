@@ -22,14 +22,22 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["timedatectl"] = {
-        "cmd": "timedatectl status",
-        "description": "System time and date",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "timedatectl",
+            "system": ["linux"],
+            "cmd": "timedatectl status",
+            "description": "System time and date",
+            "parser": parser,
+        }
+    )
 
-    main["timedatectl_timesync"] = {
-        "cmd": "timedatectl timesync-status",
-        "description": "Status of systemd-timesyncd.service",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "timedatectl_timesync",
+            "system": ["linux"],
+            "cmd": "timedatectl timesync-status",
+            "description": "Status of systemd-timesyncd.service",
+            "parser": parser,
+        }
+    )

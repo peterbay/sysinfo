@@ -12,8 +12,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_version_signature"] = {
-        "cmd": "cat /proc/version_signature",
-        "description": "OS version signature",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_version_signature",
+            "system": ["linux"],
+            "cmd": "cat /proc/version_signature",
+            "description": "OS version signature",
+            "parser": parser,
+        }
+    )

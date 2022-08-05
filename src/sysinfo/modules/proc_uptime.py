@@ -16,8 +16,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_uptime"] = {
-        "cmd": "cat /proc/uptime",
-        "description": "Information detailing how long the system has been on since its last restart",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_uptime",
+            "system": ["linux"],
+            "cmd": "cat /proc/uptime",
+            "description": "Information detailing how long the system has been on since its last restart",
+            "parser": parser,
+        }
+    )

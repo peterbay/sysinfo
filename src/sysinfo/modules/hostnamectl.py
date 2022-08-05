@@ -22,8 +22,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["hostnamectl"] = {
-        "cmd": "hostnamectl status",
-        "description": "Current system hostname and related information",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "hostnamectl",
+            "system": ["linux"],
+            "cmd": "hostnamectl status",
+            "description": "Current system hostname and related information",
+            "parser": parser,
+        }
+    )

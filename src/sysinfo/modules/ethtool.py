@@ -33,7 +33,7 @@ def register(main):
         {
             "name": "chage",
             "system": ["linux"],
-            "cmd": """cat /etc/passwd | awk '{split($0,a,":"); print a[1]}' | xargs -I {} sh -c "echo '>>> User: {}'; chage -l {}" """,
+            "cmd": """ifconfig -a -s | grep -v "Iface" | awk '{split($0,a," "); print a[1]}' | xargs -I {} sh -c "echo '>>> Device: {}'; ethtool -i {}" """,
             "description": "Users password expiration information",
             "parser": parser,
         }

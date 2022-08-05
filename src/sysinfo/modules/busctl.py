@@ -81,20 +81,32 @@ def parser_status(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["busctl"] = {
-        "cmd": "busctl --no-pager | column -t",
-        "description": "Introspect the bus",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "busctl",
+            "system": ["linux"],
+            "cmd": "busctl --no-pager | column -t",
+            "description": "Introspect the bus",
+            "parser": parser,
+        }
+    )
 
-    main["busctl_tree"] = {
-        "cmd": "busctl --no-pager --list tree",
-        "description": "Object tree for services",
-        "parser": parser_tree,
-    }
+    main.register(
+        {
+            "name": "busctl_tree",
+            "system": ["linux"],
+            "cmd": "busctl --no-pager --list tree",
+            "description": "Object tree for services",
+            "parser": parser_tree,
+        }
+    )
 
-    main["busctl_status"] = {
-        "cmd": """busctl list | awk '!/^(NAME)/ {print $1}' | xargs -n 1 -I {} sh -c "echo '>>> Device: {}'; busctl --no-pager status {}" """,
-        "description": "Process information and credentials of a bus service",
-        "parser": parser_status,
-    }
+    main.register(
+        {
+            "name": "busctl_status",
+            "system": ["linux"],
+            "cmd": """busctl list | awk '!/^(NAME)/ {print $1}' | xargs -n 1 -I {} sh -c "echo '>>> Device: {}'; busctl --no-pager status {}" """,
+            "description": "Process information and credentials of a bus service",
+            "parser": parser_status,
+        }
+    )

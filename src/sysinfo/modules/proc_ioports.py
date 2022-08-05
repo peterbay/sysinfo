@@ -26,8 +26,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_ioports"] = {
-        "cmd": "cat /proc/ioports",
-        "description": "List of currently registered port regions used for input or output communication with a device",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_ioports",
+            "system": ["linux"],
+            "cmd": "cat /proc/ioports",
+            "description": "List of currently registered port regions used for input or output communication with a device",
+            "parser": parser,
+        }
+    )

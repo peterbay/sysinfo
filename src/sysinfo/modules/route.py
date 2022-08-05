@@ -15,8 +15,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["route"] = {
-        "cmd": "route -ee",
-        "description": "IP routing table",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "route",
+            "system": ["linux"],
+            "cmd": "route -ee",
+            "description": "IP routing table",
+            "parser": parser,
+        }
+    )

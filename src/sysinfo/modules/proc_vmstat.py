@@ -22,8 +22,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_vmstat"] = {
-        "cmd": "cat /proc/vmstat",
-        "description": "Detailed virtual memory statistics from the kernel",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_vmstat",
+            "system": ["linux"],
+            "cmd": "cat /proc/vmstat",
+            "description": "Detailed virtual memory statistics from the kernel",
+            "parser": parser,
+        }
+    )

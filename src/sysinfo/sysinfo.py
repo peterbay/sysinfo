@@ -20,19 +20,41 @@
  *
 """
 
-import argparse
+import os
+import sys
 import glob
 import json
-import os
+import argparse
+import platform
 import subprocess
-import sys
-from multiprocessing import Pool
-from os.path import basename, dirname, isfile, join
 from threading import Timer
+from multiprocessing import Pool
+from os.path import dirname, basename, isfile, join
 
 sys.path.append(join(dirname(__file__), "modules"))
 
-siModules = {}
+
+class systemInfoModules:
+    modules = {}
+
+    def __init__(self, system):
+        self.system = system
+
+    def register(self, definition):
+        if "system" in definition:
+            if not self.system in definition["system"]:
+                return
+
+        if not "name" in definition:
+            return
+
+        self.modules[definition["name"]] = definition
+
+    def items(self):
+        return self.modules.items()
+
+
+siModules = None
 PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
 
@@ -51,7 +73,7 @@ def loadModules():
                 if hasattr(lib, "register"):
                     lib.register(siModules)
             else:
-                pass
+                from importlib import import_module
 
                 lib = __import__(basename(f)[:-3])
                 if hasattr(lib, "register"):
@@ -102,6 +124,10 @@ def kill(process):
 
 
 def executeCmd(cmd):
+    proc = None
+    outs = None
+    errs = None
+
     try:
         command = cmd.get("cmd", None)
         if not command:
@@ -111,7 +137,7 @@ def executeCmd(cmd):
         proc = subprocess.Popen(
             command,
             shell=True,
-            executable="/usr/bin/bash",
+            # executable="/usr/bin/bash",
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
@@ -122,17 +148,15 @@ def executeCmd(cmd):
             outs, errs = proc.communicate()
 
         except Exception as err:
-            print(err)
             proc.kill()
             outs, errs = proc.communicate()
-            cmd["error"] = err
+            cmd["error"] = str(err)
 
         finally:
             cmdTimer.cancel()
 
     except Exception as err:
-        print(err)
-        cmd["error"] = err
+        cmd["error"] = str(err)
 
     if proc:
         procPoll = proc.poll()
@@ -145,8 +169,8 @@ def executeCmd(cmd):
         cmd["stdout"] = outs
         cmd["stderr"] = errs
     else:
-        cmd["stdout"] = str(outs, "utf-8")
-        cmd["stderr"] = str(errs, "utf-8")
+        cmd["stdout"] = str(outs, "utf-8") if outs else None
+        cmd["stderr"] = str(errs, "utf-8") if errs else None
 
 
 def execute(cmd):
@@ -292,6 +316,7 @@ def argsError(error):
 
 
 def main(argv):
+    global siModules
     parser = argparse.ArgumentParser()
     parser.error = argsError
 
@@ -354,6 +379,13 @@ def main(argv):
     )
 
     parser.add_argument(
+        "--system",
+        "-s",
+        default=platform.system().lower(),
+        help="Execute or parse commands for selected system [linux, darwin, java, windows].",
+    )
+
+    parser.add_argument(
         "--verbose",
         "-v",
         action="store_true",
@@ -362,9 +394,9 @@ def main(argv):
     )
 
     parser.add_argument("commands", nargs="*", help="Commands")
-
     args = parser.parse_args()
     pathCheck(args)
+    siModules = systemInfoModules(args.system)
     run(args)
 
 

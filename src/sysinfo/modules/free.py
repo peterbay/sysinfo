@@ -32,8 +32,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["free"] = {
-        "cmd": "free -b -l -w",
-        "description": "Amount of free and used memory in the system",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "free",
+            "system": ["linux"],
+            "cmd": "free -b -l -w",
+            "description": "Amount of free and used memory in the system",
+            "parser": parser,
+        }
+    )

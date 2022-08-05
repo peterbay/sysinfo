@@ -97,50 +97,82 @@ def parser_arp(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_net_route"] = {
-        "cmd": "cat /proc/net/route",
-        "description": "IP routing information",
-        "parser": parser_route,
-    }
+    main.register(
+        {
+            "name": "proc_net_route",
+            "system": ["linux"],
+            "cmd": "cat /proc/net/route",
+            "description": "IP routing information",
+            "parser": parser_route,
+        }
+    )
 
-    main["proc_net_ax25_route"] = {
-        "cmd": "cat /proc/net/ax25_route",
-        "description": "AX25 routing information",
-        "parser": parser_route,
-    }
+    main.register(
+        {
+            "name": "proc_net_ax25_route",
+            "system": ["linux"],
+            "cmd": "cat /proc/net/ax25_route",
+            "description": "AX25 routing information",
+            "parser": parser_route,
+        }
+    )
 
-    main["proc_net_ipx_route"] = {
-        "cmd": "cat /proc/net/ipx_route",
-        "description": "IPX routing information",
-        "parser": parser_route,
-    }
+    main.register(
+        {
+            "name": "proc_net_ipx_route",
+            "system": ["linux"],
+            "cmd": "cat /proc/net/ipx_route",
+            "description": "IPX routing information",
+            "parser": parser_route,
+        }
+    )
 
-    main["proc_net_tcp"] = {
-        "cmd": "cat /proc/net/tcp",
-        "description": "TCP socket table",
-        "parser": parser_tcp_udp,
-    }
+    main.register(
+        {
+            "name": "proc_net_tcp",
+            "system": ["linux"],
+            "cmd": "cat /proc/net/tcp",
+            "description": "TCP socket table",
+            "parser": parser_tcp_udp,
+        }
+    )
 
-    main["proc_net_udp"] = {
-        "cmd": "cat /proc/net/udp",
-        "description": "UDP socket table",
-        "parser": parser_tcp_udp,
-    }
+    main.register(
+        {
+            "name": "proc_net_udp",
+            "system": ["linux"],
+            "cmd": "cat /proc/net/udp",
+            "description": "UDP socket table",
+            "parser": parser_tcp_udp,
+        }
+    )
 
-    main["proc_net_tcp6"] = {
-        "cmd": "cat /proc/net/tcp6",
-        "description": "TCP6 socket table",
-        "parser": parser_tcp_udp_6,
-    }
+    main.register(
+        {
+            "name": "proc_net_tcp6",
+            "system": ["linux"],
+            "cmd": "cat /proc/net/tcp6",
+            "description": "TCP6 socket table",
+            "parser": parser_tcp_udp_6,
+        }
+    )
 
-    main["proc_net_udp6"] = {
-        "cmd": "cat /proc/net/udp6",
-        "description": "UDP6 socket table",
-        "parser": parser_tcp_udp_6,
-    }
+    main.register(
+        {
+            "name": "proc_net_udp6",
+            "system": ["linux"],
+            "cmd": "cat /proc/net/udp6",
+            "description": "UDP6 socket table",
+            "parser": parser_tcp_udp_6,
+        }
+    )
 
-    main["proc_net_arp"] = {
-        "cmd": "cat /proc/net/arp",
-        "description": "ARP ",
-        "parser": parser_arp,
-    }
+    main.register(
+        {
+            "name": "proc_net_arp",
+            "system": ["linux"],
+            "cmd": "cat /proc/net/arp",
+            "description": "ARP ",
+            "parser": parser_arp,
+        }
+    )

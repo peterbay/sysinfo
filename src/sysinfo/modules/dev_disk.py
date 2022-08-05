@@ -35,8 +35,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["dev_disk"] = {
-        "cmd": "ls -l /dev/disk/by-*",
-        "description": "Disk devices mapping",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "dev_disk",
+            "system": ["linux"],
+            "cmd": "ls -l /dev/disk/by-*",
+            "description": "Disk devices mapping",
+            "parser": parser,
+        }
+    )

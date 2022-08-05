@@ -29,8 +29,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["findmnt"] = {
-        "cmd": "findmnt -Al | column -t",
-        "description": "List all mounted filesytems",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "findmnt",
+            "system": ["linux"],
+            "cmd": "findmnt -Al | column -t",
+            "description": "List all mounted filesytems",
+            "parser": parser,
+        }
+    )

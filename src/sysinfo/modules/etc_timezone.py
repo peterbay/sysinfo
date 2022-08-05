@@ -8,8 +8,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["etc_timezone"] = {
-        "cmd": "cat /etc/timezone",
-        "description": "Timezone settings",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "etc_timezone",
+            "system": ["linux"],
+            "cmd": "cat /etc/timezone",
+            "description": "Timezone settings",
+            "parser": parser,
+        }
+    )

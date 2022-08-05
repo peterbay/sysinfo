@@ -64,8 +64,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_slabinfo"] = {
-        "cmd": "cat /proc/slabinfo",
-        "description": "Kernel caches informations",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_slabinfo",
+            "system": ["linux"],
+            "cmd": "cat /proc/slabinfo",
+            "description": "Kernel caches informations",
+            "parser": parser,
+        }
+    )

@@ -26,8 +26,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_buddyinfo"] = {
-        "cmd": "cat /proc/buddyinfo",
-        "description": "Memory fragmentation",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_buddyinfo",
+            "system": ["linux"],
+            "cmd": "cat /proc/buddyinfo",
+            "description": "Memory fragmentation",
+            "parser": parser,
+        }
+    )

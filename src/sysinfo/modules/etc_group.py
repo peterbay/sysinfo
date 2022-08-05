@@ -10,8 +10,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["etc_group"] = {
-        "cmd": "cat /etc/group",
-        "description": "Groups essential information",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "etc_group",
+            "system": ["linux"],
+            "cmd": "cat /etc/group",
+            "description": "Groups essential information",
+            "parser": parser,
+        }
+    )

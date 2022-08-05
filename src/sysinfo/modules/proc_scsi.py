@@ -53,8 +53,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_scsi"] = {
-        "cmd": "cat /proc/scsi/scsi",
-        "description": "List of every recognized SCSI device",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_scsi",
+            "system": ["linux"],
+            "cmd": "cat /proc/scsi/scsi",
+            "description": "List of every recognized SCSI device",
+            "parser": parser,
+        }
+    )

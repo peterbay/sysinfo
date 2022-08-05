@@ -11,8 +11,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_swaps"] = {
-        "cmd": "cat /proc/swaps",
-        "description": "Measures swap space and its utilization",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_swaps",
+            "system": ["linux"],
+            "cmd": "cat /proc/swaps",
+            "description": "Measures swap space and its utilization",
+            "parser": parser,
+        }
+    )

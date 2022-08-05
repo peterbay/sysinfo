@@ -26,8 +26,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_filesystems"] = {
-        "cmd": "cat /proc/filesystems",
-        "description": "List of the file system types currently supported by the kernel",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_filesystems",
+            "system": ["linux"],
+            "cmd": "cat /proc/filesystems",
+            "description": "List of the file system types currently supported by the kernel",
+            "parser": parser,
+        }
+    )

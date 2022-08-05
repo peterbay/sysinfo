@@ -21,8 +21,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_dma"] = {
-        "cmd": "cat /proc/dma",
-        "description": "List of the registered ISA DMA channels in use",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_dma",
+            "system": ["linux"],
+            "cmd": "cat /proc/dma",
+            "description": "List of the registered ISA DMA channels in use",
+            "parser": parser,
+        }
+    )

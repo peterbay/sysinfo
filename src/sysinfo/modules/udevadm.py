@@ -128,14 +128,22 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["udevadm"] = {
-        "cmd": """udevadm info --export-db | grep "DEVNAME" | cut -d "=" -f2 | xargs -n 1 -I {} sh -c "echo '>>> Device: {}'; udevadm info --query=all --name={}; udevadm info --attribute-walk --name={}" """,
-        "description": "Queries the udev database for device information stored in the udev database",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "udevadm",
+            "system": ["linux"],
+            "cmd": """udevadm info --export-db | grep "DEVNAME" | cut -d "=" -f2 | xargs -n 1 -I {} sh -c "echo '>>> Device: {}'; udevadm info --query=all --name={}; udevadm info --attribute-walk --name={}" """,
+            "description": "Queries the udev database for device information stored in the udev database",
+            "parser": parser,
+        }
+    )
 
-    main["udevadm_block_devices"] = {
-        "cmd": """find /dev/ -type b | xargs -n 1 -I {} sh -c "echo '>>> Device: {}'; udevadm info --query=all --name={}; udevadm info --attribute-walk --name={}" """,
-        "description": "Queries the udev database for block device information stored in the udev database",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "udevadm_block_devices",
+            "system": ["linux"],
+            "cmd": """find /dev/ -type b | xargs -n 1 -I {} sh -c "echo '>>> Device: {}'; udevadm info --query=all --name={}; udevadm info --attribute-walk --name={}" """,
+            "description": "Queries the udev database for block device information stored in the udev database",
+            "parser": parser,
+        }
+    )

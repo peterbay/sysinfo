@@ -36,14 +36,22 @@ def parser_detail(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["blockdev"] = {
-        "cmd": "blockdev --report | column -t",
-        "description": "Block device ioctls",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "blockdev",
+            "system": ["linux"],
+            "cmd": "blockdev --report | column -t",
+            "description": "Block device ioctls",
+            "parser": parser,
+        }
+    )
 
-    main["blockdev_detail"] = {
-        "cmd": """blkid -o device | xargs -n 1 -I {} sh -c "echo '>>> Device: {}'; blockdev -v --getalignoff --getbsz --getdiscardzeroes --getfra --getiomin --getioopt --getmaxsect --getpbsz --getra --getro --getsize64 --getss {}" """,
-        "description": "Block device ioctls details",
-        "parser": parser_detail,
-    }
+    main.register(
+        {
+            "name": "blockdev_detail",
+            "system": ["linux"],
+            "cmd": """blkid -o device | xargs -n 1 -I {} sh -c "echo '>>> Device: {}'; blockdev -v --getalignoff --getbsz --getdiscardzeroes --getfra --getiomin --getioopt --getmaxsect --getpbsz --getra --getro --getsize64 --getss {}" """,
+            "description": "Block device ioctls details",
+            "parser": parser_detail,
+        }
+    )

@@ -40,8 +40,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_diskstats"] = {
-        "cmd": "cat /proc/diskstats",
-        "description": "I/O statistics of block devices",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_diskstats",
+            "system": ["linux"],
+            "cmd": "cat /proc/diskstats",
+            "description": "I/O statistics of block devices",
+            "parser": parser,
+        }
+    )

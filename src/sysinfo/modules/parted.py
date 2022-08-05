@@ -53,8 +53,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["parted"] = {
-        "cmd": "parted -m -l print",
-        "description": "Lists partition layout on all block devices",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "parted",
+            "system": ["linux"],
+            "cmd": "parted -m -l print",
+            "description": "Lists partition layout on all block devices",
+            "parser": parser,
+        }
+    )

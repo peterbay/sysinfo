@@ -24,8 +24,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["update_alternatives"] = {
-        "cmd": "update-alternatives --get-selections",
-        "description": "Symbolic links determining default commands",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "update_alternatives",
+            "system": ["linux"],
+            "cmd": "update-alternatives --get-selections",
+            "description": "Symbolic links determining default commands",
+            "parser": parser,
+        }
+    )

@@ -39,8 +39,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["etc_mtab"] = {
-        "cmd": "cat /etc/mtab",
-        "description": "Currently mounted filesystems",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "etc_mtab",
+            "system": ["linux"],
+            "cmd": "cat /etc/mtab",
+            "description": "Currently mounted filesystems",
+            "parser": parser,
+        }
+    )

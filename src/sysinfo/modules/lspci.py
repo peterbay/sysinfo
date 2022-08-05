@@ -32,8 +32,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["lspci"] = {
-        "cmd": "lspci -mm -vvv",
-        "description": "List all PCI devices",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "lspci",
+            "system": ["linux"],
+            "cmd": "lspci -mm -vvv",
+            "description": "List all PCI devices",
+            "parser": parser,
+        }
+    )

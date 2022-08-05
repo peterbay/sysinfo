@@ -29,8 +29,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_cmdline"] = {
-        "cmd": "cat /proc/cmdline",
-        "description": "Parameters passed to the kernel at the time it is started",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_cmdline",
+            "system": ["linux"],
+            "cmd": "cat /proc/cmdline",
+            "description": "Parameters passed to the kernel at the time it is started",
+            "parser": parser,
+        }
+    )

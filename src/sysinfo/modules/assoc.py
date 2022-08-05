@@ -1,5 +1,5 @@
 import re
-from sysinfo_lib import camelCase
+from sysinfo_lib import parseTable, tableToDict, camelCase
 
 
 def parser(stdout, stderr, to_camelcase):
@@ -7,12 +7,12 @@ def parser(stdout, stderr, to_camelcase):
     unprocessed = []
 
     if stdout:
+        device = ""
         for line in stdout.splitlines():
-            kv = re.search(r"^(\S+)\s*(.*)$", line)
+            kv = re.search(r"^([^=]+)=(.*)$", line)
             if kv:
-                key = camelCase(kv.group(1), to_camelcase)
-                value = kv.group(2).strip()
-
+                key = kv.group(1)
+                value = kv.group(2)
                 output[key] = value
                 continue
 
@@ -24,10 +24,10 @@ def parser(stdout, stderr, to_camelcase):
 def register(main):
     main.register(
         {
-            "name": "getconf",
-            "system": ["linux"],
-            "cmd": "getconf -a",
-            "description": "Configuration variables for the current system and their values",
+            "name": "assoc",
+            "system": ["windows"],
+            "cmd": "assoc",
+            "description": "File associations",
             "parser": parser,
         }
     )

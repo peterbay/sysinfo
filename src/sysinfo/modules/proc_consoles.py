@@ -51,8 +51,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_consoles"] = {
-        "cmd": "cat /proc/consoles",
-        "description": "Information about current consoles including tty",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_consoles",
+            "system": ["linux"],
+            "cmd": "cat /proc/consoles",
+            "description": "Information about current consoles including tty",
+            "parser": parser,
+        }
+    )

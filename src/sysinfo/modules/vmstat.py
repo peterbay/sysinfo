@@ -119,26 +119,42 @@ def parser_forks(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["vmstat_stats"] = {
-        "cmd": "vmstat -s",
-        "description": "Displays a table of various event counters and memory statistics",
-        "parser": parser_stats,
-    }
+    main.register(
+        {
+            "name": "vmstat_stats",
+            "system": ["linux"],
+            "cmd": "vmstat -s",
+            "description": "Displays a table of various event counters and memory statistics",
+            "parser": parser_stats,
+        }
+    )
 
-    main["vmstat_disk"] = {
-        "cmd": "vmstat -dwn",
-        "description": "Report disk statistics",
-        "parser": parser_disk,
-    }
+    main.register(
+        {
+            "name": "vmstat_disk",
+            "system": ["linux"],
+            "cmd": "vmstat -dwn",
+            "description": "Report disk statistics",
+            "parser": parser_disk,
+        }
+    )
 
-    main["vmstat_disk_sum"] = {
-        "cmd": "vmstat -D",
-        "description": "Report some summary statistics about disk activity",
-        "parser": parser_disk_sum,
-    }
+    main.register(
+        {
+            "name": "vmstat_disk_sum",
+            "system": ["linux"],
+            "cmd": "vmstat -D",
+            "description": "Report some summary statistics about disk activity",
+            "parser": parser_disk_sum,
+        }
+    )
 
-    main["vmstat_forks"] = {
-        "cmd": "vmstat -f",
-        "description": "Displays the number of forks since boot",
-        "parser": parser_forks,
-    }
+    main.register(
+        {
+            "name": "vmstat_forks",
+            "system": ["linux"],
+            "cmd": "vmstat -f",
+            "description": "Displays the number of forks since boot",
+            "parser": parser_forks,
+        }
+    )

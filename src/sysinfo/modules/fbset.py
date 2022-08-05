@@ -106,14 +106,22 @@ def parserInfo(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["fbset"] = {
-        "cmd": "fbset -a",
-        "description": "Show frame buffer device settings",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "fbset",
+            "system": ["linux"],
+            "cmd": "fbset -a",
+            "description": "Show frame buffer device settings",
+            "parser": parser,
+        }
+    )
 
-    main["fbset_info"] = {
-        "cmd": "fbset -i",
-        "description": "Show frame buffer device information",
-        "parser": parserInfo,
-    }
+    main.register(
+        {
+            "name": "fbset_info",
+            "system": ["linux"],
+            "cmd": "fbset -i",
+            "description": "Show frame buffer device information",
+            "parser": parserInfo,
+        }
+    )

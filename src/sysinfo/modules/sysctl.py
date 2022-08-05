@@ -38,14 +38,22 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["sysctl"] = {
-        "cmd": "sysctl -a -e",
-        "description": "Runtime kernel parameters",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "sysctl",
+            "system": ["linux"],
+            "cmd": "sysctl -a -e",
+            "description": "Runtime kernel parameters",
+            "parser": parser,
+        }
+    )
 
-    main["sysctl_system"] = {
-        "cmd": "sysctl -a -e --system",
-        "description": "Runtime kernel parameters from all system configuration files",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "sysctl_system",
+            "system": ["linux"],
+            "cmd": "sysctl -a -e --system",
+            "description": "Runtime kernel parameters from all system configuration files",
+            "parser": parser,
+        }
+    )

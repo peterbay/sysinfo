@@ -26,8 +26,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_locks"] = {
-        "cmd": "cat /proc/locks",
-        "description": "Files currently locked by the kernel",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_locks",
+            "system": ["linux"],
+            "cmd": "cat /proc/locks",
+            "description": "Files currently locked by the kernel",
+            "parser": parser,
+        }
+    )

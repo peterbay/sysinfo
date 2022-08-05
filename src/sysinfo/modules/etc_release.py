@@ -21,8 +21,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["etc_release"] = {
-        "cmd": "cat /etc/*release",
-        "description": "OS release info",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "etc_release",
+            "system": ["linux"],
+            "cmd": "cat /etc/*release",
+            "description": "OS release info",
+            "parser": parser,
+        }
+    )

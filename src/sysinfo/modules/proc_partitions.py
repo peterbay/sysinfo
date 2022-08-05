@@ -12,8 +12,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_partitions"] = {
-        "cmd": "cat /proc/partitions",
-        "description": "Partition block allocation information",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_partitions",
+            "system": ["linux"],
+            "cmd": "cat /proc/partitions",
+            "description": "Partition block allocation information",
+            "parser": parser,
+        }
+    )

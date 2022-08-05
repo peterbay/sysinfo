@@ -79,8 +79,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["ifconfig"] = {
-        "cmd": "ifconfig -a -v",
-        "description": "List all interfaces which are currently available, even if down",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "ifconfig",
+            "system": ["linux"],
+            "cmd": "ifconfig -a -v",
+            "description": "List all interfaces which are currently available, even if down",
+            "parser": parser,
+        }
+    )

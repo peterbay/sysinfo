@@ -17,8 +17,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_cgroups"] = {
-        "cmd": "cat /proc/cgroups",
-        "description": "Control  groups",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_cgroups",
+            "system": ["linux"],
+            "cmd": "cat /proc/cgroups",
+            "description": "Control  groups",
+            "parser": parser,
+        }
+    )

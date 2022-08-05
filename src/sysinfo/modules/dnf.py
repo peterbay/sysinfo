@@ -68,14 +68,22 @@ def parser_installed(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["dnf_repolist"] = {
-        "cmd": "dnf repolist --all",
-        "description": "DNF - defined repositories",
-        "parser": parser_repolist,
-    }
+    main.register(
+        {
+            "name": "dnf_repolist",
+            "system": ["linux"],
+            "cmd": "dnf repolist --all",
+            "description": "DNF - defined repositories",
+            "parser": parser_repolist,
+        }
+    )
 
-    main["dnf_installed"] = {
-        "cmd": "dnf list installed",
-        "description": "DNF - list installed packages",
-        "parser": parser_installed,
-    }
+    main.register(
+        {
+            "name": "dnf_installed",
+            "system": ["linux"],
+            "cmd": "dnf list installed",
+            "description": "DNF - list installed packages",
+            "parser": parser_installed,
+        }
+    )

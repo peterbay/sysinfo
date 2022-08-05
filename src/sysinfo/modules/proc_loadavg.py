@@ -23,8 +23,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_loadavg"] = {
-        "cmd": "cat /proc/loadavg",
-        "description": "Load average in regard to both the CPU and IO over time",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_loadavg",
+            "system": ["linux"],
+            "cmd": "cat /proc/loadavg",
+            "description": "Load average in regard to both the CPU and IO over time",
+            "parser": parser,
+        }
+    )

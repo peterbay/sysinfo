@@ -13,8 +13,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["arp"] = {
-        "cmd": """arp""",
-        "description": "System ARP cache",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "arp",
+            "system": ["linux"],
+            "cmd": "arp",
+            "description": "System ARP cache",
+            "parser": parser,
+        }
+    )

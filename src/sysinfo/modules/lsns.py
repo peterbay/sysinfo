@@ -15,8 +15,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["lsns"] = {
-        "cmd": "lsns -o NS,TYPE,PATH,NPROCS,PID,PPID,UID,USER,COMMAND",
-        "description": "Block device ioctls",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "lsns",
+            "system": ["linux"],
+            "cmd": "lsns -o NS,TYPE,PATH,NPROCS,PID,PPID,UID,USER,COMMAND",
+            "description": "Block device ioctls",
+            "parser": parser,
+        }
+    )

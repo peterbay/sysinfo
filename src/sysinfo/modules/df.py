@@ -38,8 +38,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["df"] = {
-        "cmd": "df -a --output=source,fstype,itotal,iused,iavail,ipcent,size,used,avail,pcent,file,target",
-        "description": "Report file system disk space usage",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "df",
+            "system": ["linux"],
+            "cmd": "df -a --output=source,fstype,itotal,iused,iavail,ipcent,size,used,avail,pcent,file,target",
+            "description": "Report file system disk space usage",
+            "parser": parser,
+        }
+    )

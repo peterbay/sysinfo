@@ -32,8 +32,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_devices"] = {
-        "cmd": "cat /proc/devices",
-        "description": "Installed cryptographic ciphers used by the Linux kernel",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_devices",
+            "system": ["linux"],
+            "cmd": "cat /proc/devices",
+            "description": "Installed cryptographic ciphers used by the Linux kernel",
+            "parser": parser,
+        }
+    )

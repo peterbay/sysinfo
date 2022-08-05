@@ -24,8 +24,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["rpm"] = {
-        "cmd": 'rpm -q -a --queryformat "%{INSTALLTIME}|%{BUILDTIME}|%{NAME}|%{VERSION}|%{RELEASE}|%{arch}|%{VENDOR}|%{PACKAGER}|%{DISTRIBUTION}|%{DISTTAG}\n"',
-        "description": "Querying all RPM packages",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "rpm",
+            "system": ["linux"],
+            "cmd": 'rpm -q -a --queryformat "%{INSTALLTIME}|%{BUILDTIME}|%{NAME}|%{VERSION}|%{RELEASE}|%{arch}|%{VENDOR}|%{PACKAGER}|%{DISTRIBUTION}|%{DISTTAG}\n"',
+            "description": "Querying all RPM packages",
+            "parser": parser,
+        }
+    )

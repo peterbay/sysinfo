@@ -18,8 +18,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["env"] = {
-        "cmd": "env",
-        "description": "Environment variables",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "env",
+            "system": ["linux"],
+            "cmd": "env",
+            "description": "Environment variables",
+            "parser": parser,
+        }
+    )

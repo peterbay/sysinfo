@@ -33,8 +33,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_cpuinfo"] = {
-        "cmd": "cat /proc/cpuinfo",
-        "description": "Type of processor used by your system",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_cpuinfo",
+            "system": ["linux"],
+            "cmd": "cat /proc/cpuinfo",
+            "description": "Type of processor used by your system",
+            "parser": parser,
+        }
+    )

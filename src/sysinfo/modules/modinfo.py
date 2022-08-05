@@ -32,8 +32,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["modinfo"] = {
-        "cmd": """lsmod | grep -v "Module" | sed 's/ .*//g' | xargs -I {} -n 1 sh -c "echo '>>> moduleName: {}'; modinfo {}" """,
-        "description": "Information about a Linux Kernel modules",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "modinfo",
+            "system": ["linux"],
+            "cmd": """lsmod | grep -v "Module" | sed 's/ .*//g' | xargs -I {} -n 1 sh -c "echo '>>> moduleName: {}'; modinfo {}" """,
+            "description": "Information about a Linux Kernel modules",
+            "parser": parser,
+        }
+    )

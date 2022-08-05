@@ -31,8 +31,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_stat"] = {
-        "cmd": "cat /proc/stat",
-        "description": "Kernel/system statistics",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_stat",
+            "system": ["linux"],
+            "cmd": "cat /proc/stat",
+            "description": "Kernel/system statistics",
+            "parser": parser,
+        }
+    )

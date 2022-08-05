@@ -33,6 +33,7 @@ optional arguments:
   --list, -l                  List all commands.
   --output OUTPUT, -o OUTPUT  Path to the output file.
   --pool POOL, -p POOL        Pool size for parallel execution of commands. (default value is 5)
+  --system SYSTEM, -s SYSTEM  Execute or parse commands for selected system [linux, darwin, java, windows].
   --verbose, -v               Add more info to output - options, commands, raw command result.
 ```
 ## Examples
@@ -103,11 +104,17 @@ sudo python sysinfo.py --import-dir ./out blkid
 
 ## Available commands
 ```
+arp                       - System ARP cache
 blkid                     - Block device attributes
 blockdev                  - Block device ioctls
+blockdev_detail           - Block device ioctls details
 busctl                    - Introspect the bus
+busctl_status             - Process information and credentials of a bus service
+busctl_tree               - Object tree for services
+chage                     - Users password expiration information
 chrt                      - Scheduling attributes of all the tasks (threads)
 dev_disk                  - Disk devices mapping
+dev_input                 - Input devices mapping
 df                        - Report file system disk space usage
 dmidecode                 - Dumping all information from DMI (SMBIOS)
 dmidecode_baseboard       - Dumping BASEBOARD information from DMI (SMBIOS)
@@ -137,14 +144,14 @@ fbset_info                - Show frame buffer device information
 findmnt                   - List all mounted filesytems
 free                      - Amount of free and used memory in the system
 getconf                   - Configuration variables for the current system and their values
-groups                    - Group names
-hardware_platform         - Hardware platform
+groups                    - Group names (compgen)
+hardware_platform         - Hardware platform (uname)
 hostnamectl               - Current system hostname and related information
 ifconfig                  - List all interfaces which are currently available, even if down
-jobs                      - Job names, if job control is active
-kernel_name               - Kernel name
-kernel_release            - Kernel release
-kernel_version            - Kernel version
+jobs                      - Job names, if job control is active (compgen)
+kernel_name               - Kernel name (uname)
+kernel_release            - Kernel release (uname)
+kernel_version            - Kernel version (uname)
 lsblk                     - Lists information about all block devices
 lscpu                     - Information about the CPU architecture
 lsmod                     - Show the status of modules in the Linux Kernel
@@ -152,11 +159,14 @@ lsns                      - Block device ioctls
 lsof                      - Information about files opened by processes
 lspci                     - List all PCI devices
 lsusb                     - List USB devices
-machine                   - Machine hardware name
+machine                   - Machine hardware name (uname)
 modinfo                   - Information about a Linux Kernel modules
-nodename                  - Network node hostname
-operating_system          - Operating system
+nodename                  - Network node hostname (uname)
+operating_system          - Operating system (uname)
 parted                    - Lists partition layout on all block devices
+proc_buddyinfo            - Memory fragmentation
+proc_bus_input            - Input devices
+proc_cgroups              - Control  groups
 proc_cmdline              - Parameters passed to the kernel at the time it is started
 proc_consoles             - Information about current consoles including tty
 proc_cpuinfo              - Type of processor used by your system
@@ -173,33 +183,47 @@ proc_locks                - Files currently locked by the kernel
 proc_meminfo              - Reports a large amount of valuable information about the systems RAM usage
 proc_modules              - List of all modules loaded into the kernel
 proc_mounts               - List mounted filesystems (info provides from kernel)
+proc_net_arp              - ARP
+proc_net_ax25_route       - AX25 routing information
+proc_net_ipx_route        - IPX routing information
+proc_net_route            - IP routing information
+proc_net_tcp              - TCP socket table
+proc_net_tcp6             - TCP6 socket table
+proc_net_udp              - UDP socket table
+proc_net_udp6             - UDP6 socket table
 proc_partitions           - Partition block allocation information
 proc_scsi                 - List of every recognized SCSI device
+proc_slabinfo             - Kernel caches informations
+proc_stat                 - Kernel/system statistics
 proc_swaps                - Measures swap space and its utilization
 proc_sys                  - Information about the system and kernel features
 proc_uptime               - Information detailing how long the system has been on since its last restart
 proc_version              - Version of the Linux kernel, the version of gcc used to compile the kernel, and the time of kernel compilation
+proc_version_signature    - OS version signature
 proc_vmstat               - Detailed virtual memory statistics from the kernel
-processor                 - Processor type
+processor                 - Processor type (uname)
 prtstat                   - Print statistics of a processes
 ps                        - Report a snapshot of the current processes
 python_pip_packages       - List available python modules
 python_platform           - Probe the underlying platform's hardware, operating system, and Python interpreter version information
+route                     - IP routing table
 rpm                       - Querying all RPM packages
-services                  - Service names
+services                  - Service names (compgen)
 services_list             - Displays services with status
-services_params           - Displays services with status
-shell_alias               - Shell alias names
-shell_all_commands        - Shell command names
-shell_builtins            - Names of shell builtin commands
-shell_exported_variables  - Names of exported shell variables
-shell_variables           - Names of all shell variables
+services_params           - Displays services with params
+shell_alias               - Shell alias names (compgen)
+shell_all_commands        - Shell command names (compgen)
+shell_builtins            - Names of shell builtin commands (compgen)
+shell_exported_variables  - Names of exported shell variables (compgen)
+shell_variables           - Names of all shell variables (compgen)
 sysctl                    - Runtime kernel parameters
 sysctl_system             - Runtime kernel parameters from all system configuration files
 timedatectl               - System time and date
+timedatectl_timesync      - Status of systemd-timesyncd.service
 udevadm                   - Queries the udev database for device information stored in the udev database
 udevadm_block_devices     - Queries the udev database for block device information stored in the udev database
-users                     - User names
+update_alternatives       - Symbolic links determining default commands
+users                     - User names (compgen)
 vmstat_disk               - Report disk statistics
 vmstat_disk_sum           - Report some summary statistics about disk activity
 vmstat_forks              - Displays the number of forks since boot

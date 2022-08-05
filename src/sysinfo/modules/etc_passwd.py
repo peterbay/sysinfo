@@ -9,8 +9,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["etc_passwd"] = {
-        "cmd": "cat /etc/passwd",
-        "description": "Attributes of each user or account on a computer",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "etc_passwd",
+            "system": ["linux"],
+            "cmd": "cat /etc/passwd",
+            "description": "Attributes of each user or account on a computer",
+            "parser": parser,
+        }
+    )

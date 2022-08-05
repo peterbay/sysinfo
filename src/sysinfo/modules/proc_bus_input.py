@@ -75,8 +75,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_bus_input"] = {
-        "cmd": 'cat /proc/bus/input/devices; echo ">>> handlers"; cat /proc/bus/input/handlers;',
-        "description": "Input devices",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_bus_input",
+            "system": ["linux"],
+            "cmd": 'cat /proc/bus/input/devices; echo ">>> handlers"; cat /proc/bus/input/handlers;',
+            "description": "Input devices",
+            "parser": parser,
+        }
+    )

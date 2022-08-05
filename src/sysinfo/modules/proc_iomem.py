@@ -24,8 +24,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_iomem"] = {
-        "cmd": "cat /proc/iomem",
-        "description": """Map of the system's memory for each physical device""",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_iomem",
+            "system": ["linux"],
+            "cmd": "cat /proc/iomem",
+            "description": """Map of the system's memory for each physical device""",
+            "parser": parser,
+        }
+    )

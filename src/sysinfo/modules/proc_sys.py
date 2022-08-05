@@ -41,8 +41,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_sys"] = {
-        "cmd": """find /proc/sys -type f -follow -print 2>/dev/null | xargs -n 1 -I {} sh -c 'VAL=$(cat {} 2>/dev/null); echo {}:$VAL;'""",
-        "description": "Information about the system and kernel features",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_sys",
+            "system": ["linux"],
+            "cmd": """find /proc/sys -type f -follow -print 2>/dev/null | xargs -n 1 -I {} sh -c 'VAL=$(cat {} 2>/dev/null); echo {}:$VAL;'""",
+            "description": "Information about the system and kernel features",
+            "parser": parser,
+        }
+    )

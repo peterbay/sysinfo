@@ -23,8 +23,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["lscpu"] = {
-        "cmd": "lscpu",
-        "description": "Information about the CPU architecture",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "lscpu",
+            "system": ["linux"],
+            "cmd": "lscpu",
+            "description": "Information about the CPU architecture",
+            "parser": parser,
+        }
+    )

@@ -31,8 +31,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["lsblk"] = {
-        "cmd": "lsblk -P -o NAME,KNAME,MAJ:MIN,FSTYPE,MOUNTPOINT,LABEL,UUID,PARTLABEL,PARTUUID,RA,RO,RM,MODEL,SERIAL,SIZE,STATE,OWNER,GROUP,MODE,ALIGNMENT,MIN-IO,OPT-IO,PHY-SEC,LOG-SEC,ROTA,SCHED,RQ-SIZE,TYPE,DISC-ALN,DISC-GRAN,DISC-MAX,DISC-ZERO,WSAME,WWN,RAND,PKNAME,HCTL,TRAN,REV,VENDOR",
-        "description": "Lists information about all block devices",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "lsblk",
+            "system": ["linux"],
+            "cmd": "lsblk -P -o NAME,KNAME,MAJ:MIN,FSTYPE,MOUNTPOINT,LABEL,UUID,PARTLABEL,PARTUUID,RA,RO,RM,MODEL,SERIAL,SIZE,STATE,OWNER,GROUP,MODE,ALIGNMENT,MIN-IO,OPT-IO,PHY-SEC,LOG-SEC,ROTA,SCHED,RQ-SIZE,TYPE,DISC-ALN,DISC-GRAN,DISC-MAX,DISC-ZERO,WSAME,WWN,RAND,PKNAME,HCTL,TRAN,REV,VENDOR",
+            "description": "Lists information about all block devices",
+            "parser": parser,
+        }
+    )

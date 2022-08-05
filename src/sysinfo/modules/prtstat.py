@@ -30,8 +30,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["prtstat"] = {
-        "cmd": "ps -eo pid | xargs -I {} prtstat -r {}",
-        "description": "Print statistics of a processes",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "prtstat",
+            "system": ["linux"],
+            "cmd": "ps -eo pid | xargs -I {} prtstat -r {}",
+            "description": "Print statistics of a processes",
+            "parser": parser,
+        }
+    )

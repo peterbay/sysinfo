@@ -31,8 +31,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["lsmod"] = {
-        "cmd": "lsmod",
-        "description": "Show the status of modules in the Linux Kernel",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "lsmod",
+            "system": ["linux"],
+            "cmd": "lsmod",
+            "description": "Show the status of modules in the Linux Kernel",
+            "parser": parser,
+        }
+    )

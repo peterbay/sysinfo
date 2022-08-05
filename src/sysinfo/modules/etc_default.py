@@ -47,8 +47,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["etc_default"] = {
-        "cmd": 'find /etc/default -type f -follow -print | xargs grep ""',
-        "description": "Default configuration for programs",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "etc_default",
+            "system": ["linux"],
+            "cmd": 'find /etc/default -type f -follow -print | xargs grep ""',
+            "description": "Default configuration for programs",
+            "parser": parser,
+        }
+    )

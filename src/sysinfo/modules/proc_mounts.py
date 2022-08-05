@@ -28,8 +28,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_mounts"] = {
-        "cmd": "cat /proc/mounts",
-        "description": "List mounted filesystems (info provides from kernel)",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_mounts",
+            "system": ["linux"],
+            "cmd": "cat /proc/mounts",
+            "description": "List mounted filesystems (info provides from kernel)",
+            "parser": parser,
+        }
+    )

@@ -67,12 +67,20 @@ def python_platform(to_camelcase):
 
 def register(main):
     if loaded_pkg_resources:
-        main["python_pip_packages"] = {
-            "function": python_pip_packages,
-            "description": "List available python modules",
-        }
+        main.register(
+            {
+                "name": "python_pip_packages",
+                "system": ["linux"],
+                "function": python_pip_packages,
+                "description": "List available python modules",
+            }
+        )
 
-    main["python_platform"] = {
-        "function": python_platform,
-        "description": "Probe the underlying platform's hardware, operating system, and Python interpreter version information",
-    }
+    main.register(
+        {
+            "name": "python_platform",
+            "system": ["linux"],
+            "function": python_platform,
+            "description": "Probe the underlying platform's hardware, operating system, and Python interpreter version information",
+        }
+    )

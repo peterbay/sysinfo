@@ -37,14 +37,22 @@ def parser_services_params(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["services_list"] = {
-        "cmd": """systemctl -l --type service --all --plain | grep -i -e ".service\|description" | sed 's/^\s*//g' """,
-        "description": "Displays services with status",
-        "parser": parser_services,
-    }
+    main.register(
+        {
+            "name": "services_list",
+            "system": ["linux"],
+            "cmd": """systemctl -l --type service --all --plain | grep -i -e ".service\|description" | sed 's/^\s*//g' """,
+            "description": "Displays services with status",
+            "parser": parser_services,
+        }
+    )
 
-    main["services_params"] = {
-        "cmd": """systemctl -l --type service --all --plain | sed -E 's/^\s*(\\S+.service).*$/\\1/g' | grep -i -e ".service" | xargs -I '{}' sh -c "echo '>>> Service: {}'; systemctl show {} --no-page" """,
-        "description": "Displays services with params",
-        "parser": parser_services_params,
-    }
+    main.register(
+        {
+            "name": "services_params",
+            "system": ["linux"],
+            "cmd": """systemctl -l --type service --all --plain | sed -E 's/^\s*(\\S+.service).*$/\\1/g' | grep -i -e ".service" | xargs -I '{}' sh -c "echo '>>> Service: {}'; systemctl show {} --no-page" """,
+            "description": "Displays services with params",
+            "parser": parser_services_params,
+        }
+    )

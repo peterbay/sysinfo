@@ -106,62 +106,102 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["dmidecode"] = {
-        "cmd": "dmidecode",
-        "description": "Dumping all information from DMI (SMBIOS)",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "dmidecode",
+            "system": ["linux"],
+            "cmd": "dmidecode",
+            "description": "Dumping all information from DMI (SMBIOS)",
+            "parser": parser,
+        }
+    )
 
-    main["dmidecode_bios"] = {
-        "cmd": "dmidecode -t bios",
-        "description": "Dumping BIOS information from DMI (SMBIOS)",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "dmidecode_bios",
+            "system": ["linux"],
+            "cmd": "dmidecode -t bios",
+            "description": "Dumping BIOS information from DMI (SMBIOS)",
+            "parser": parser,
+        }
+    )
 
-    main["dmidecode_system"] = {
-        "cmd": "dmidecode -t system",
-        "description": "Dumping SYSTEM information from DMI (SMBIOS)",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "dmidecode_system",
+            "system": ["linux"],
+            "cmd": "dmidecode -t system",
+            "description": "Dumping SYSTEM information from DMI (SMBIOS)",
+            "parser": parser,
+        }
+    )
 
-    main["dmidecode_baseboard"] = {
-        "cmd": "dmidecode -t baseboard",
-        "description": "Dumping BASEBOARD information from DMI (SMBIOS)",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "dmidecode_baseboard",
+            "system": ["linux"],
+            "cmd": "dmidecode -t baseboard",
+            "description": "Dumping BASEBOARD information from DMI (SMBIOS)",
+            "parser": parser,
+        }
+    )
 
-    main["dmidecode_chassis"] = {
-        "cmd": "dmidecode -t chassis",
-        "description": "Dumping CHASSIS information from DMI (SMBIOS)",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "dmidecode_chassis",
+            "system": ["linux"],
+            "cmd": "dmidecode -t chassis",
+            "description": "Dumping CHASSIS information from DMI (SMBIOS)",
+            "parser": parser,
+        }
+    )
 
-    main["dmidecode_processor"] = {
-        "cmd": "dmidecode -t processor",
-        "description": "Dumping CHASSIS information from DMI (SMBIOS)",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "dmidecode_processor",
+            "system": ["linux"],
+            "cmd": "dmidecode -t processor",
+            "description": "Dumping CHASSIS information from DMI (SMBIOS)",
+            "parser": parser,
+        }
+    )
 
-    main["dmidecode_memory"] = {
-        "cmd": "dmidecode -t memory",
-        "description": "Dumping MEMORY information from DMI (SMBIOS)",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "dmidecode_memory",
+            "system": ["linux"],
+            "cmd": "dmidecode -t memory",
+            "description": "Dumping MEMORY information from DMI (SMBIOS)",
+            "parser": parser,
+        }
+    )
 
-    main["dmidecode_cache"] = {
-        "cmd": "dmidecode -t cache",
-        "description": "Dumping CACHE information from DMI (SMBIOS)",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "dmidecode_cache",
+            "system": ["linux"],
+            "cmd": "dmidecode -t cache",
+            "description": "Dumping CACHE information from DMI (SMBIOS)",
+            "parser": parser,
+        }
+    )
 
-    main["dmidecode_connector"] = {
-        "cmd": "dmidecode -t connector",
-        "description": "Dumping CONNECTOR information from DMI (SMBIOS)",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "dmidecode_connector",
+            "system": ["linux"],
+            "cmd": "dmidecode -t connector",
+            "description": "Dumping CONNECTOR information from DMI (SMBIOS)",
+            "parser": parser,
+        }
+    )
 
-    main["dmidecode_slot"] = {
-        "cmd": "dmidecode -t slot",
-        "description": "Dumping SLOT information from DMI (SMBIOS)",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "dmidecode_slot",
+            "system": ["linux"],
+            "cmd": "dmidecode -t slot",
+            "description": "Dumping SLOT information from DMI (SMBIOS)",
+            "parser": parser,
+        }
+    )

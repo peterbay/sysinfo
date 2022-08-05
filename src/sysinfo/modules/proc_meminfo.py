@@ -30,8 +30,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_meminfo"] = {
-        "cmd": "cat /proc/meminfo",
-        "description": "Reports a large amount of valuable information about the systems RAM usage",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_meminfo",
+            "system": ["linux"],
+            "cmd": "cat /proc/meminfo",
+            "description": "Reports a large amount of valuable information about the systems RAM usage",
+            "parser": parser,
+        }
+    )

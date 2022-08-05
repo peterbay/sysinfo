@@ -39,7 +39,7 @@ def parser(stdout, stderr, to_camelcase):
             #         setPathValue(output, path, value)
 
             #     continue
-        
+
             # else:
             #     print(line)
 
@@ -49,8 +49,12 @@ def parser(stdout, stderr, to_camelcase):
 
 
 def register(main):
-    main["proc_fs"] = {
-        "cmd": """find /proc/fs -type f -follow -print | xargs grep "" """,
-        "description": "File system parameters",
-        "parser": parser,
-    }
+    main.register(
+        {
+            "name": "proc_fs",
+            "system": ["linux"],
+            "cmd": """find /proc/fs -type f -follow -print | xargs grep "" """,
+            "description": "File system parameters",
+            "parser": parser,
+        }
+    )
