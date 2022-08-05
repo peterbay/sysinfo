@@ -38,7 +38,7 @@ def requirements(fname):
 
 
 # We use the version to construct the DOWNLOAD_URL.
-VERSION = find_version("src/sysifo/__init__.py")
+VERSION = find_version("src/sysinfo/__init__.py")
 
 # URL to the repository on Github.
 REPO_URL = 'https://github.com/peterbay/sysinfo'
@@ -49,7 +49,7 @@ DOWNLOAD_URL = ''.join((REPO_URL, '/tarball/release/', VERSION))
 
 INSTALL_REQUIRES = requirements("requirements.txt")
 EXTRAS_REQUIRE = {
-    "test": requirements("requirements-dev.txt"),
+    "test": requirements("requirements-test.txt"),
 }
 
 try:

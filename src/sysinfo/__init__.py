@@ -26,7 +26,9 @@ __init__.py
 
 __program__ = "sysinfo"
 __executable__ = "sysinfo"
-__description__ = "sysinfo - Python based scripts for obtaining system information from Linux."
+__description__ = (
+    "sysinfo - Python based scripts for obtaining system information from Linux."
+)
 __author__ = "Petr Vavrin"
 __email__ = "pvavrin@gmail.com"
 __version__ = "0.0.1"

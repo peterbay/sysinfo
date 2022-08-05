@@ -20,15 +20,15 @@
  *
 """
 
-import os
-import sys
+import argparse
 import glob
 import json
-import argparse
+import os
 import subprocess
-from threading import Timer
+import sys
 from multiprocessing import Pool
-from os.path import dirname, basename, isfile, join
+from os.path import basename, dirname, isfile, join
+from threading import Timer
 
 sys.path.append(join(dirname(__file__), "modules"))
 
@@ -51,7 +51,7 @@ def loadModules():
                 if hasattr(lib, "register"):
                     lib.register(siModules)
             else:
-                from importlib import import_module
+                pass
 
                 lib = __import__(basename(f)[:-3])
                 if hasattr(lib, "register"):

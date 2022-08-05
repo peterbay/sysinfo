@@ -1,5 +1,4 @@
 coverage
-bandit
 pytest
 pytest-aiohttp
 pytest-asyncio
@@ -8,14 +7,10 @@ pytest-coverage
 pytest-datafiles
 autoflake
 black
-flake8
-isort
 pylint
 pylint-exit
-autoflake
 bandit
 certifi
-coverage
 flake8
 flake8-polyfill
 isort
@@ -27,8 +22,8 @@ pre-commit
 py
 pycodestyle
 pyflakes
-pylint
 pyparsing
 safety
 types-requests
 typing-extensions
+interrogate
