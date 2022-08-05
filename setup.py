@@ -3,10 +3,13 @@
 
 import os
 import re
+import sys
 
 from distutils.core import setup
 from pathlib import Path
 from setuptools import find_packages, setup
+
+sys.path.append("src")
 
 def find_version(fname):
     """Attempts to find the version number in the file names fname.
@@ -35,7 +38,7 @@ def requirements(fname):
 
 
 # We use the version to construct the DOWNLOAD_URL.
-VERSION = find_version("__init__.py")
+VERSION = find_version("src/sysifo/__init__.py")
 
 # URL to the repository on Github.
 REPO_URL = 'https://github.com/peterbay/sysinfo'
@@ -74,7 +77,7 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 2.7',
     ],
-    package_dir={"": "."},
+    package_dir={"": "src"},
     packages=find_packages(),
     install_requires=INSTALL_REQUIRES,
     include_package_data=True,
