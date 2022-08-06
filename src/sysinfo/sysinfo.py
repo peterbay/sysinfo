@@ -24,6 +24,7 @@ import os
 import sys
 import glob
 import json
+import locale
 import argparse
 import platform
 import subprocess
@@ -134,6 +135,16 @@ def executeCmd(cmd):
             cmd["error"] = "Empty command"
             return
 
+        system = cmd.get("system", None)
+        if system:
+            if system == "windows":
+                subprocess.call(
+                    ["chcp", "65001"],
+                    shell=True,
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                )
+
         proc = subprocess.Popen(
             command,
             shell=True,
@@ -169,8 +180,11 @@ def executeCmd(cmd):
         cmd["stdout"] = outs
         cmd["stderr"] = errs
     else:
-        cmd["stdout"] = str(outs, "utf-8") if outs else None
-        cmd["stderr"] = str(errs, "utf-8") if errs else None
+        try:
+            cmd["stdout"] = str(outs, "utf-8") if outs else None
+            cmd["stderr"] = str(errs, "utf-8") if errs else None
+        except Exception as e:
+            cmd["error"] = str(e)
 
 
 def execute(cmd):
@@ -239,7 +253,8 @@ def run(args):
             if args.import_dir:
                 settings["import_dir"] = args.import_dir
 
-            settings["to_camelcase"] = args.camel_case
+            settings["to_camelcase"] = to_camelcase
+            settings["system"] = args.system
             selectedModules.append(settings)
             executeModules = True
 
@@ -297,6 +312,7 @@ def run(args):
                 result.pop("name", None)
                 result.pop("unprocessed", None)
                 result.pop("import_dir", None)
+                result.pop("system", None)
 
             results[name] = result
 
