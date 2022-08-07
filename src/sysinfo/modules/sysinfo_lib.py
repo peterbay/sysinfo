@@ -11,8 +11,10 @@ def sortedList(st):
     values.sort()
     return values
 
+
 def camelCase_cb(matchobj):
     return " ".join([matchobj.group(1), matchobj.group(2)])
+
 
 def camelCase(st, to_camelcase):
     if not to_camelcase:
@@ -151,5 +153,31 @@ def tableToDict(input, key):
                 output[row[key]] = row
             else:
                 return input
+
+    return output
+
+
+def fixMultilineAndSplit(data, match, delimiter):
+    output = []
+    last_line = None
+
+    for line in data.splitlines():
+        if last_line == None:
+            last_line = line
+            continue
+
+        if line.strip() == "":
+            continue
+
+        if re.match(r"^\s+", line):
+            line = line.strip()
+            last_line = f"{last_line}{delimiter}{line}"
+
+        else:
+            output.append(last_line)
+            last_line = line
+
+    if not last_line == None:
+        output.append(last_line)
 
     return output
