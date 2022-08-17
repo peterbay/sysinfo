@@ -1,0 +1,33 @@
+import re
+from sysinfo_lib import camelCase
+
+
+def parser(stdout, stderr, to_camelcase):
+    output = {}
+    unprocessed = []
+
+    if stdout:
+        for line in stdout.splitlines():
+            kv = re.search(r"^([^:]+):\s*(.*)", line)
+            if kv:
+                key = camelCase(kv.group(1), to_camelcase)
+                value = kv.group(2)
+
+                output[key] = value
+                continue
+
+            unprocessed.append(line)
+
+    return {"output": output, "unprocessed": unprocessed}
+
+
+def register(main):
+    main.register(
+        {
+            "name": "hostnamectl",
+            "system": ["linux"],
+            "cmd": "hostnamectl status",
+            "description": "Current system hostname and related information",
+            "parser": parser,
+        }
+    )
