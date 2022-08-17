@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 """
  *
  * sysinfo - Python based scripts for obtaining system information from Linux.

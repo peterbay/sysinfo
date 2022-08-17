@@ -40,7 +40,7 @@ optional arguments:
 
 ### Standart JSON output
 ```
-python2 sysinfo.py lscpu
+python sysinfo.py lscpu
 ```
 ```json
 {
@@ -68,7 +68,7 @@ python2 sysinfo.py lscpu
 
 ### Get single value
 ```
-python2 sysinfo.py lscpu | jq -r ".lscpu.output.modelName"
+python sysinfo.py lscpu | jq -r ".lscpu.output.modelName"
 ```
 ```
 ARM1176
@@ -76,7 +76,7 @@ ARM1176
 
 ### Output in CSV format
 ```
-python2 sysinfo.py lsblk | jq -r ".lsblk.output[] | [.name, .label, .size,
+python sysinfo.py lsblk | jq -r ".lsblk.output[] | [.name, .label, .size,
 .mountpoint] | @csv"
 ```
 
@@ -103,6 +103,9 @@ sudo python sysinfo.py --import-dir ./out blkid
 * [jq](https://stedolan.github.io/jq/)
 
 ## Available commands
+
+### Linux
+
 ```
 arp                       - System ARP cache
 blkid                     - Block device attributes
@@ -230,4 +233,17 @@ vmstat_forks              - Displays the number of forks since boot
 vmstat_stats              - Displays a table of various event counters and memory statistics
 yum_installed             - YUM - list installed packages
 yum_repolist              - YUM - defined repositories
+```
+
+### Windows
+
+```
+arp                       - System ARP cache
+assoc                     - File associations
+driverquery               - List of installed device drivers.
+driverquery_signed        - List of installed device signed drivers.
+tasklist                  - Get currently running processes
+tasklist_apps             - Get services hosted in each process
+tasklist_modules          - Get modules loaded in each process
+tasklist_services         - Get services hosted in each process
 ```
